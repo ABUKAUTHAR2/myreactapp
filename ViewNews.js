@@ -178,9 +178,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 15,
   },
-  backIcon: {
-    marginRight: 15,
-  },
+
   headerText: {
     color: '#fff',
     fontSize: 20,
