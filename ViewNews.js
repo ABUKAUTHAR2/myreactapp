@@ -16,7 +16,7 @@ class ViewNews extends Component {
         description: 'Lorem ipsum dolor sitest  sed malesuada orci commodo. em quis nisi.',
         date: 'March 28, 2023',
         time: '10:00 AM',
-         icons: ['share', 'heart', 'star'],
+         icons: ['share', 'heart', 'comment-o'],
   likes:0,
       },
       {
@@ -27,7 +27,7 @@ class ViewNews extends Component {
         description: 'Lorem ipsu magna utd velit nec velit commodo, sed malesuada orci commod nisi.',
         date: 'March 27, 2023',
         time: '2:30 PM',
-          icons: ['share', 'heart', 'star'],
+          icons: ['share', 'heart', 'comment-o'],
   likes:0,
 
       },
@@ -39,7 +39,7 @@ class ViewNews extends Component {
         description: 'Lorem ipsum  varius auctor.velit commodo, sed malesuada orcnisi.',
         date: 'March 26, 2023',
         time: '8:45 PM',
-         icons: ['share', 'heart', 'star'],
+         icons: ['share', 'heart', 'comment-o'],
   likes:0,
       },
       {
@@ -50,7 +50,7 @@ class ViewNews extends Component {
         description: 'Lorem ipsum  varius auctor.velit commodo, sed malesuada orcnisi.',
         date: 'March 26, 2023',
         time: '8:45 PM',
-         icons: ['share', 'heart', 'star'],
+         icons: ['share', 'heart', 'comment-o'],
   likes:0,
       }
     ]
@@ -83,7 +83,7 @@ class ViewNews extends Component {
     const { menuOpen } = this.state;
     const { children } = this.props;
     const screenWidth = Dimensions.get('window').width;
-    const popupWidth = screenWidth * 0.75;
+    const popupWidth = screenWidth * 0.5;
 
     return (
       <View style={styles.container}>
@@ -121,7 +121,7 @@ class ViewNews extends Component {
             
                 </View>
                 <View style={styles.newsIcons}>
-                  <Icon name="star" size={20} style={styles.icon} color="#4CAF50" />
+                  <Icon name="comment-o" size={20} style={styles.icon} color="#4CAF50" />
                 </View>
               </View>
               <Text style={styles.newsContext}>{item.context}</Text>
@@ -148,13 +148,21 @@ class ViewNews extends Component {
 {menuOpen && (
           <View style={[styles.popup, { width: popupWidth }]}>
             <TouchableOpacity onPress={this.toggleMenu} style={styles.cancelButton}>
-              <MaterialIcons name="close" size={32} color="white" />
+              <MaterialIcons name="close" size={32} color="rgb(129, 5, 5)" />
             </TouchableOpacity>
-            <View style={styles.menuItems}>
-             
-            <Text>QWERTYU</Text><Icon name="star" size={20} style={styles.icon} color="#4CAF50" />
-            <Text>QWERTYU</Text>
-            <Text>QWERTYU</Text>
+            <Image
+              source={require('./assets/kiutsologo.png')}
+              style={styles.logo}
+            />
+            
+            <View style={styles.menuItems} color="black">
+            <View style={styles.line} />
+            <Text>QWERTYU</Text><Icon name="star" size={20} style={styles.icon} color="black" />
+            <Text>QWERTYU</Text><Icon name="rocket" size={30} color="#900" />
+            <Text>QWERTYU</Text><Icon name="cog" size={20} style={styles.icon} color="black" />
+            <Text>QWERTYU</Text><Icon name="clock-o" size={20} style={styles.icon} color="black" />
+            <Text>QWERTYU</Text><Icon name="question-circle" size={20} style={styles.icon} color="black" />
+            <Text>QWERTYU</Text><Icon name="users" size={20} style={styles.icon} color="black" />
               </View>
           </View>
         )}
