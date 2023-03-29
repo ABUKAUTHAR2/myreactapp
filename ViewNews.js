@@ -157,12 +157,155 @@ class ViewNews extends Component {
             
             <View style={styles.menuItems} color="black">
             <View style={styles.line} />
-            <Text>QWERTYU</Text><Icon name="star" size={20} style={styles.icon} color="black" />
-            <Text>QWERTYU</Text><Icon name="rocket" size={30} color="#900" />
-            <Text>QWERTYU</Text><Icon name="cog" size={20} style={styles.icon} color="black" />
-            <Text>QWERTYU</Text><Icon name="clock-o" size={20} style={styles.icon} color="black" />
-            <Text>QWERTYU</Text><Icon name="question-circle" size={20} style={styles.icon} color="black" />
-            <Text>QWERTYU</Text><Icon name="users" size={20} style={styles.icon} color="black" />
+            <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="star" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          Important
+        </Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="cog" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          settings
+        </Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="clock-o" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          Recent
+        </Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="question-circle" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          Help&feedbck
+        </Text>
+      </View>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="users" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          KIUTSO-TEAM
+        </Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="rocket" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          Username
+        </Text>
+      </View>
+    </TouchableOpacity>
+
+
+           
               </View>
           </View>
         )}
