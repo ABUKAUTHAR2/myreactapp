@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView,TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -53,7 +53,8 @@ class ViewNews extends Component {
          icons: ['share', 'heart', 'comment-o'],
   likes:0,
       }
-    ]
+    ],
+    searchText: '',
   }
 
   toggleSearch = () => {
@@ -61,6 +62,19 @@ class ViewNews extends Component {
       searchEnabled: !prevState.searchEnabled
     }));
   }
+  handleSearchTextChange = (text) => {
+    this.setState({ searchText: text });
+  };
+
+  getFilteredNews = () => {
+    const { news, searchText } = this.state;
+    if (searchText.trim() === '') {
+      return news;
+    }
+    const regex = new RegExp(searchText, 'i');
+    return news.filter((item) => regex.test(item.summary));
+  };
+
   handleHearticon  = (id) => {
     this.setState(prevState => {
       const news = prevState.news.map(item => {
@@ -81,6 +95,7 @@ class ViewNews extends Component {
   render() {
     const { searchEnabled, news } = this.state;
     const { menuOpen } = this.state;
+    const { navigation } = this.props;
     const { children } = this.props;
     const screenWidth = Dimensions.get('window').width;
     const popupWidth = screenWidth * 0.5;
@@ -90,7 +105,9 @@ class ViewNews extends Component {
 
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Icon name="search" size={20} onPress={this.toggleSearch} color="#fff" />
+          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+            <Icon name="search" size={20}  color="#fff" />
+            </TouchableOpacity>
           </View>
           <View style={styles.headerMiddle}>
             <Image
@@ -103,9 +120,18 @@ class ViewNews extends Component {
           <Icon name="bars" size={20} color="#fff" />
            </TouchableOpacity>
           </View>
-         
         </View>
-
+        {searchEnabled && (
+        <View style={styles.searchContainer}>
+          <Icon name="search" size={25} color="#ccc" style={styles.searchIcon} />
+          <TextInput
+            placeholder="Search News"
+            style={styles.searchInput}
+            value={this.state.searchText}
+            onChangeText={this.handleSearchTextChange}
+          />
+        </View>
+      )}
 
         <ScrollView style={styles.newsContainer}>
           {news.map(item => (
@@ -350,6 +376,18 @@ width: 70,
 height: 70,
 borderRadius: 50,
 paddingTop:70
+},
+searchContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#f5f5f5',
+  paddingVertical: 10,
+  paddingHorizontal: 15,
+},
+searchInput: {
+  flex: 1,
+  marginLeft: 10,
+  fontSize: 18,
 },
 newsContainer: {
 paddingHorizontal: 20

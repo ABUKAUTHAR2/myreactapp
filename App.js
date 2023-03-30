@@ -5,6 +5,8 @@ import Signup from './Signup';
 import Login from './Login';
 import AddNews from './AddNews';
 import ViewNews from './ViewNews';
+import Search from './Search';
+import Selectednew from './Selectednew';
 
 const Stack = createNativeStackNavigator();
 class App extends Component {
@@ -16,6 +18,8 @@ class App extends Component {
           <Stack.Screen name='Signup' component={Signup}/>
           <Stack.Screen name='AddNews' component={AddNews}/>
           <Stack.Screen name='ViewNews' component={ViewNews}/>
+          <Stack.Screen name='Search' component={Search}/>
+          <Stack.Screen name='Selectednew' component={Selectednew}/>
         </Stack.Navigator>
       </NavigationContainer>
     );
