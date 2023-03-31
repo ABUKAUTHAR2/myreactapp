@@ -1,62 +1,43 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
+import { View, Text, Share, Image,Platform,Alert, CameraRoll,  StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+//import  from 'react-native-share';
+
 import { MaterialIcons } from '@expo/vector-icons';
+import Footer from './Footer';
+import news from './newsData';
 
 class ViewNews extends Component {
   state = {
     searchEnabled: false,
     menuOpen: false,
-    news: [
-      {
-        id: 1,
-        image: require('./assets/image1.png'),
-        context: 'SPORTS',
-        summary: 'Minister of Sport introduced publicly about Kiutso award',
-        description: 'Lorem ipsum dolor sitest  sed malesuada orci commodo. em quis nisi.',
-        date: 'March 28, 2023',
-        time: '10:00 AM',
-         icons: ['share', 'heart', 'comment-o'],
-  likes:0,
-      },
-      {
-        id: 2,
-        image: require('./assets/abuu.jpg'),
-        context: 'POLITICS',
-        summary: 'The President of the United States announced new policies on climate change',
-        description: 'Lorem ipsu magna utd velit nec velit commodo, sed malesuada orci commod nisi.',
-        date: 'March 27, 2023',
-        time: '2:30 PM',
-          icons: ['share', 'heart', 'comment-o'],
-  likes:0,
-
-      },
-      {
-        id: 3,
-        image: require('./assets/abuu.jpg'),
-        context: 'ENTERTAINMENT',
-        summary: 'The new movieer directed by Christopher Nolan broke the box office record',
-        description: 'Lorem ipsum  varius auctor.velit commodo, sed malesuada orcnisi.',
-        date: 'March 26, 2023',
-        time: '8:45 PM',
-         icons: ['share', 'heart', 'comment-o'],
-  likes:0,
-      },
-      {
-        id: 4,
-        image: require('./assets/abuu.jpg'),
-        context: 'ENTERTAINMENT',
-        summary: 'The new movie directed by Christopher Nolan broke the box office record',
-        description: 'Lorem ipsum  varius auctor.velit commodo, sed malesuada orcnisi.',
-        date: 'March 26, 2023',
-        time: '8:45 PM',
-         icons: ['share', 'heart', 'comment-o'],
-  likes:0,
-      }
-    ],
+    news: news,
     searchText: '',
   }
 
+
+  onShare = async (id) => {
+    const item = this.state.news.find(item => item.id === id);
+    if (item) {
+      const summary = item.summary || "hamnakitu";
+      try {
+        const shareResult = await Share.share({
+          message: summary + '   '+'   '+ "DOWNLOAD KIUTSO APP NOW ON GOOGLE PLAY TO SEE FULL NEWS THROUGH https://play.google.com/store/apps/details?id=com.instagram.android&hl=en&gl=US",
+        });
+        if (shareResult.action === Share.sharedAction) {
+          console.log("News shared successfully");
+        } else if (shareResult.action === Share.dismissedAction) {
+          console.log("News sharing dismissed");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+  
+  
+  
+  
   toggleSearch = () => {
     this.setState(prevState => ({
       searchEnabled: !prevState.searchEnabled
@@ -64,6 +45,9 @@ class ViewNews extends Component {
   }
   handleSearchTextChange = (text) => {
     this.setState({ searchText: text });
+  };
+  handleSummaryPress = (item) => {
+    this.props.navigation.navigate('Tselectednew', { item });
   };
 
   getFilteredNews = () => {
@@ -75,7 +59,22 @@ class ViewNews extends Component {
     return news.filter((item) => regex.test(item.summary));
   };
 
-  handleHearticon  = (id) => {
+  handleHearticon = (id) => {
+  this.setState(prevState => {
+    const news = prevState.news.map(item => {
+      if (item.id === id) {
+        const likes = prevState[item.id]?.likes ?? 0; // check if likes exists in state, default to 0 if not
+        const newLikes = likes + (item.liked ? -1 : 1); // toggle between adding and subtracting 1
+        return { ...item, likes: newLikes, liked: !item.liked }; // update likes count and toggle liked state
+      } else {
+        return item;
+      }
+    });
+    return { ...prevState, news };
+  });
+}
+
+  handleDearticon = (id) => {
     this.setState(prevState => {
       const news = prevState.news.map(item => {
         if (item.id === id) {
@@ -87,7 +86,11 @@ class ViewNews extends Component {
       });
       return { ...prevState, news };
     });
-  }
+  };
+  handleDoubleTap = (id) => {
+    // Call handleHearticon function when double tap occurs
+    this.handleDearticon(id);
+  };
   toggleMenu = () => {
     this.setState(prevState => ({ menuOpen: !prevState.menuOpen }));
   };
@@ -96,16 +99,17 @@ class ViewNews extends Component {
     const { searchEnabled, news } = this.state;
     const { menuOpen } = this.state;
     const { navigation } = this.props;
-    const { children } = this.props;
     const screenWidth = Dimensions.get('window').width;
     const popupWidth = screenWidth * 0.5;
+   
 
     return (
+      
       <View style={styles.container}>
 
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Tsearch')}>
             <Icon name="search" size={20}  color="#fff" />
             </TouchableOpacity>
           </View>
@@ -136,23 +140,22 @@ class ViewNews extends Component {
         <ScrollView style={styles.newsContainer}>
           {news.map(item => (
             <View key={item.id} style={styles.newsItem}>
-              <Image source={item.image} style={styles.newsImage} resizeMode="cover" />
+             <TouchableOpacity onPress={() => this.handleDoubleTap(item.id)} ><Image source={item.image} style={styles.newsImage} resizeMode="cover" /></TouchableOpacity>
               <View style={styles.newsFooter}>
                 <View style={styles.newsIcons}>
-                  <TouchableOpacity onPress={() => this.handleHearticon(item.id)}><Icon name="heart" size={20} style={styles.icon} color="red" /></TouchableOpacity>
+                <TouchableOpacity key={item.id} onPress={() => this.handleHearticon(item.id)}><Icon name="heart" size={20} style={styles.icon} color="red" /></TouchableOpacity>
                   <Text>{item.likes}</Text>
                 </View>
                 <View style={styles.newsIcons}>
-                  <Icon name="share-alt" size={20} style={styles.icon} color="black" />
-            
+                 <TouchableOpacity key={item.id} onPress={() => this.onShare(item.id)} ><Icon name="share-alt" size={20} style={styles.icon} color="black" /></TouchableOpacity> 
                 </View>
                 <View style={styles.newsIcons}>
-                  <Icon name="comment-o" size={20} style={styles.icon} color="#4CAF50" />
-                </View>
+                 <TouchableOpacity onPress={() => navigation.navigate('Important')}><Icon name="star" size={20} style={styles.icon} color="#4CAF50" /></TouchableOpacity>  
+              </View>
               </View>
               <Text style={styles.newsContext}>{item.context}</Text>
-              <Text style={styles.newsSummary}>{item.summary}</Text>
-              <Text style={styles.newsDescription}>{item.description}</Text>
+              <TouchableOpacity  onPress={() => this.handleSummaryPress(item)}><Text style={styles.newsSummary}>{item.summary}</Text></TouchableOpacity>
+              
               <View style={styles.newsFooter}>
                 <View style={styles.newsIcons}>
                   <Text style={styles.newsDate}>{item.date}</Text>
@@ -165,12 +168,7 @@ class ViewNews extends Component {
             </View>
           ))}
         </ScrollView>
-        <View style={styles.footer}>
-          <Icon name="home" size={30} style={styles.footerIcon} color="#fff" />
-          <Icon name="search" size={25} style={styles.footerIcon} color="#fff" />
-<Icon name="bell" size={25} style={styles.footerIcon} color="#fff" />
-<Icon name="user" size={25} style={styles.footerIcon} color="#fff" />
-</View>
+        <Footer navigation={this.props.navigation} />
 {menuOpen && (
           <View style={[styles.popup, { width: popupWidth }]}>
             <TouchableOpacity onPress={this.toggleMenu} style={styles.cancelButton}>
@@ -189,6 +187,7 @@ class ViewNews extends Component {
         padding: 10,
        
       }}
+      onPress={() => navigation.navigate('Importantrr')}
     >
       <View
         style={{
@@ -203,7 +202,7 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-          Important
+          Importantr
         </Text>
       </View>
     </TouchableOpacity>
@@ -325,12 +324,10 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-          Username
+          Developer
         </Text>
       </View>
     </TouchableOpacity>
-
-
            
               </View>
           </View>

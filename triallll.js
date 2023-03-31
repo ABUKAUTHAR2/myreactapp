@@ -1,11 +1,20 @@
-import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput, Alert } from 'react-native';
+/*import React, { Component } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  TextInput,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { MaterialIcons } from '@expo/vector-icons';
+import Footer from './Footer';
 
-class Search extends Component {
+class Important extends Component {
   state = {
-    news: [
+    news:[
       {
         id: 1,
         image: require('./assets/image1.png'),
@@ -15,228 +24,180 @@ class Search extends Component {
         date: 'March 28, 2023',
         time: '10:00 AM',
         icons: ['share', 'heart', 'comment-o'],
-        likes: 0,
+        likes:0,
       },
       {
         id: 2,
-        image: require('./assets/abuu.jpg'),
+        image: require('./assets/henry.jpg'),
         context: 'POLITICS',
-        summary: 'The President of the United States announced new policies on climate change',
-        description: 'Lorem ipsu magna utd velit nec velit commodo, sed malesuada orci commod nisi.',
+        summary: 'President of KIUT Student Government Dissolves Cabinet, Appoints New Members',
+        description: `In a surprising move, the President of the Students Government of Kampala International University (KIU) has dissolved the entire cabinet of ministers and appointed a new set of members. The decision was announced on Thursday during a press briefing held at the university.
+
+        According to the President, the move was aimed at strengthening the student government and improving its effectiveness in addressing the concerns and issues affecting the student body. The President noted that the previous cabinet had faced several challenges, which had hindered its ability to deliver on its mandate.
+        
+        The new cabinet comprises of experienced and competent individuals from various faculties within the university. The President expressed confidence in the new team, stating that they were well-equipped to tackle the current issues facing the student community.
+        
+        The decision has been met with mixed reactions from students, with some expressing concern over the sudden change in leadership, while others have welcomed the move as a positive step towards improving the student government's performance.
+        
+        The President has assured the student community that the new cabinet members will work diligently to address their concerns and needs. He has called on students to support the new team and work together towards a better future for all.
+        
+        The student government plays a crucial role in representing the interests of the student body, and this recent development will undoubtedly have a significant impact on the future of KIU. As a journalist, we will continue to follow this story and provide updates on any further developments.`,
         date: 'March 27, 2023',
         time: '2:30 PM',
         icons: ['share', 'heart', 'comment-o'],
-        likes: 0,
+        likes:0,
       },
       {
         id: 3,
-        image: require('./assets/abuu.jpg'),
-        context: 'ENTERTAINMENT',
-        summary: 'The new movieer directed by Christopher Nolan broke the box office record',
-        description: 'Lorem ipsum  varius auctor.velit commodo, sed malesuada orcnisi.',
+        image: require('./assets/sponsoraward.jpg'),
+        context: 'SPORTS',
+        summary: 'Minister of finance opened doors for sponsors to sponse kiutso awards',
+        description: 'Minister of finance of KIUTSO opened doors for sponsors to sponse kiutso awards, in the meeting with jounalists she said government is ready to permit any invester to invest in future of KAMAPAL INTERNATIONAL UNIVERSITY  IN TANZANIA  students.',
         date: 'March 26, 2023',
         time: '8:45 PM',
         icons: ['share', 'heart', 'comment-o'],
-        likes: 0,
+        likes:0,
       },
       {
         id: 4,
         image: require('./assets/abuu.jpg'),
         context: 'ENTERTAINMENT',
         summary: 'The new movie directed by Christopher Nolan broke the box office record',
-        description: 'Lorem ipsum  varius auctor.velit commodo, sed malesuada orcnisi.',
-        date: 'March 26, 2023',
-        time: '8:45 PM',
+        description:`Lorem ipsum dolor sitest sed malesuada orci commodo. em quis nisi.`,
+        date: 'March 25, 2023',
+        time: '5:15 PM',
         icons: ['share', 'heart', 'comment-o'],
-        likes: 0,
-      }
-    ],
-    searchText: '',
-  };
-
-  handleSearchTextChange = (text) => {
-    this.setState({ searchText: text });
-  };
-
-  handleImagePress = (id) => {
-    const newsItem = this.state.news.find(item => item.id === id);
-    return(
-
-<ScrollView style={styles.newsContainer}>
-          
-            <View key={newsItem.id} style={styles.newsItem}>
-              <Image source={newsItem.image} style={styles.newsImage2} resizeMode="cover" />
-              <View style={styles.newsFooter}>
-                <View style={styles.newsIcons}>
-                  <TouchableOpacity onPress={() => this.handleHearticon(newsItem.id)}><Icon name="heart" size={20} style={styles.icon} color="red" /></TouchableOpacity>
-                  <Text>{newsItem.likes}</Text>
-                </View>
-                <View style={styles.newsIcons}>
-                  <Icon name="share-alt" size={20} style={styles.icon} color="black" />
-            
-                </View>
-                <View style={styles.newsIcons}>
-                  <Icon name="comment-o" size={20} style={styles.icon} color="#4CAF50" />
-                </View>
-              </View>
-              <Text style={styles.newsContext}>{newsItem.context}</Text>
-              <Text style={styles.newsSummary}>{newsItem.summary}</Text>
-              <Text style={styles.newsDescription}>{newsItem.description}</Text>
-              <View style={styles.newsFooter}>
-                <View style={styles.newsIcons}>
-                  <Text style={styles.newsDate}>{newsItem.date}</Text>
-                </View>
-                <View style={styles.newsIcons}>
-                  <Text style={styles.newsTime}>{newsItem.time}</Text>
-                </View>
-              </View>
-              <View style={styles.line} />
-            </View>
-          
-        </ScrollView>)
-
-
-    
-   
-  };
-
-  renderNewsImages = () => {
-    const { news, searchText } = this.state;
-    const filteredNews = news.filter(item => {
-      const regex = new RegExp(searchText, 'gi');
-      return item.summary.match(regex) || item.context.match(regex) || item.description.match(regex);
-    });
-    if (filteredNews.length === 0) {
-      return <Text style={styles.noResultsText}>No results found</Text>;
-    }
-    return (
-      <View style={styles.newsImageContainer}>
-        {filteredNews.map(item => (
-          <TouchableOpacity key={item.id} onPress={() => this.handleImagePress(item.id)}>
-            <Image source={item.image} style={styles.newsImage} />
-          </TouchableOpacity>
+        likes:0,
+        },
+        ]
+        };
+        
+        handleLike = (id) => {
+        const updatedNews = this.state.news.map(newsItem => {
+        if (newsItem.id === id) {
+        return {
+        ...newsItem,
+        likes: newsItem.likes + 1
+        };
+        } else {
+        return newsItem;
+        }
+        });
+        this.setState({ news: updatedNews });
+        }
+        
+        render() {
+        return (
+        <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+        {this.state.news.map((newsItem) => (
+        <TouchableOpacity key={newsItem.id} style={styles.card} onPress={() => this.props.navigation.navigate('Details', { news: newsItem })}>
+        <Image source={newsItem.image} style={styles.cardImage} />
+        <View style={styles.cardText}>
+        <Text style={styles.cardContext}>{newsItem.context}</Text>
+        <Text style={styles.cardSummary}>{newsItem.summary}</Text>
+        <Text style={styles.cardDescription} numberOfLines={3}>{newsItem.description}</Text>
+        <View style={styles.cardFooter}>
+        <View style={styles.cardFooterIcons}>
+        {newsItem.icons.map((iconName, index) => (
+        <TouchableOpacity key={index} onPress={() => alert(iconName)}>
+        <Icon name={iconName} size={18} style={styles.cardFooterIcon} />
+        </TouchableOpacity>
         ))}
-      </View>
-    );
-  };
-  
-
-render() {
-return (
-<View style={styles.container}>
-<View style={styles.searchBar}>
-<Icon name="search" size={20} color="white" />
-<TextInput
-         style={styles.searchInput}
-         placeholder="Search news"
-         onChangeText={this.handleSearchTextChange}
-         value={this.state.searchText}
-       />
-</View>
-<ScrollView>
-{this.renderNewsImages()}
-</ScrollView>
-</View>
-);
-}
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 20,
-    marginTop: 20,
-    borderWidth: 1,
-    backgroundColor:'#4CAF50',
-    borderColor: 'white',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-  },
-  searchInput: {
-    marginLeft: 10,
-    flex: 1,
-  },
-  newsImageContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-    
-  },
-  newsImage: {
-    width: Dimensions.get('window').width / 3 - 25,
-    height: Dimensions.get('window').width / 3 - 25,
-    borderRadius: 5,
-    marginVertical:5,
-  },
-  noResultsText: {
-    textAlign: 'center',
-    fontSize: 18,
-    marginTop: 20,
-  }
-
-
-
-  ,
-newsContainer: {
-paddingHorizontal: 20
-},
-newsItem: {
-marginVertical: 20,
-shadowColor: '#000',
-shadowOffset: {
-width: 0,
-height: 2
-},
-shadowOpacity: 0.23,
-shadowRadius: 2.62,
-elevation: 4
-},
-newsImage2: {
-width: '100%',
-height: undefined,
-    aspectRatio: 1,
-    resizeMode: 'cover'
-},
-newsContext: {
-color: '#4CAF50',
-fontWeight: 'bold',
-fontSize: 16,
-marginTop: 10
-},
-newsSummary: {
-fontWeight: 'bold',
-fontSize: 20,
-marginTop: 5
-},
-newsDescription: {
-marginTop: 10,
-lineHeight: 22
-},
-newsFooter: {
-flexDirection: 'row',
-justifyContent: 'space-between',
-alignItems: 'center',
-marginTop: 10,
-paddingBottom: 10,
-paddingHorizontal: 20
-},
-newsIcons: {
-flexDirection: 'row',
-alignItems: 'center'
-},
-newsDate: {
-marginLeft: 5
-},
-newsTime: {
-marginRight: 5
-},
-});
-export default Search
+        </View>
+        <View style={styles.cardFooterLikes}>
+        <TouchableOpacity onPress={() => this.handleLike(newsItem.id)}>
+        <Icon name="heart" size={18} color={newsItem.likes > 0 ? '#ff0000' : '#000'} />
+        </TouchableOpacity>
+        <Text style={styles.cardFooterLikesText}>{newsItem.likes}</Text>
+        </View>
+        </View>
+        </View>
+        </TouchableOpacity>
+        ))}
+        </ScrollView>
+        <Footer />
+        </View>
+        );
+        }
+        }
+        
+        export default Important;
+        const styles = StyleSheet.create({
+          container: {
+            flex: 1,
+            backgroundColor: '#fff',
+            padding: 10,
+          },
+          header: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 20,
+          },
+          headerText: {
+            fontSize: 24,
+            fontWeight: 'bold',
+          },
+          newsContainer: {
+            marginBottom: 20,
+          },
+          newsImage: {
+            width: '100%',
+            height: 200,
+            resizeMode: 'cover',
+            borderRadius: 10,
+          },
+          newsContext: {
+            backgroundColor: '#FFA500',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 5,
+            marginBottom: 10,
+            alignSelf: 'flex-start',
+          },
+          newsContextText: {
+            color: '#fff',
+            fontWeight: 'bold',
+          },
+          newsSummary: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            marginBottom: 10,
+          },
+          newsDescription: {
+            fontSize: 16,
+            marginBottom: 10,
+            lineHeight: 24,
+            textAlign: 'justify',
+          },
+          newsInfoContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 10,
+          },
+          newsInfoText: {
+            fontSize: 14,
+            marginLeft: 5,
+          },
+          iconContainer: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 10,
+          },
+          iconButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 5,
+            padding: 5,
+            backgroundColor: '#eee',
+            width: '30%',
+          },
+          iconButtonText: {
+            marginLeft: 5,
+            fontSize: 14,
+          },
+        });
+        */

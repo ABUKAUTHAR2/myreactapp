@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text,Image, View, TextInput, TouchableOpacity } from 'react-native';
 
 
 export default class Login extends Component {
   render() {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     return (
       <View style={styles.container}>
+        <Image
+              source={require('./assets/kiutsologo.png')}
+              style={styles.logoimage}
+            />
         <Text style={styles.logo}>KIUTSO APP</Text>
+        
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
@@ -47,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+   
   },
   logo: {
     fontWeight: 'bold',
@@ -54,6 +60,12 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
     marginBottom: 40,
   },
+  logoimage: {
+    width: 70,
+    height: 70,
+    borderRadius: 50,
+    paddingTop:70
+    },
   inputView: {
     width: '80%',
     backgroundColor: '#F1F1F1',
