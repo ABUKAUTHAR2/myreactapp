@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image,ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Footer from './Footer';
 
 class Tselectednew extends Component {

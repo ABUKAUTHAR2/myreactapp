@@ -1,10 +1,39 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text,Image, View, TextInput, TouchableOpacity } from 'react-native';
+import  Credentials  from './Passwords'; // Import Credentials array from Password.js
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
+  }
+
+  handleLogin = async () => {
+    const { email, password } = this.state;
+    const user = Credentials.find(
+      (u) => u.email === email && u.password === password
+    );
+    if (user) {
+      const token = 'loggedIn';
+      await AsyncStorage.setItem('userToken', token);
+      this.props.navigation.navigate('ViewNews');
+    } else if (email === '00000' && password === '00000') {
+      const token = 'admin';
+      await AsyncStorage.setItem('userToken', token);
+      this.props.navigation.navigate('AddNews');
+    } else {
+      alert('Invalid email or password');
+    }
+  };
+  
+
+
   render() {
-    const {navigation} = this.props;
     return (
       <View style={styles.container}>
         <Image
@@ -18,6 +47,7 @@ export default class Login extends Component {
             style={styles.inputText}
             placeholder="Email..."
             placeholderTextColor="#003f5c"
+            onChangeText={(email) => this.setState({ email })}
           />
         </View>
         <View style={styles.inputView}>
@@ -26,25 +56,25 @@ export default class Login extends Component {
             placeholder="Password..."
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
+            onChangeText={(password) => this.setState({ password })}
           />
         </View>
-        <TouchableOpacity style={styles.loginBtn}  onPress={() => this.props.navigation.navigate('AddNews')}>
+        <TouchableOpacity style={styles.loginBtn}  onPress={this.handleLogin}>
           <Text style={styles.loginText} >LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
           <Text style={styles.signupText}>Don't have an account? Signup</Text>
         </TouchableOpacity>
-        
 
         <TouchableOpacity style={styles.loginBtn}  onPress={() => this.props.navigation.navigate('ViewNews')}>
           <Text style={styles.loginText} >DELETE</Text>
         </TouchableOpacity>
 
-
       </View>
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {

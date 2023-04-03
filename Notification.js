@@ -8,10 +8,10 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
- 
+  
 } from 'react-native';
 import Footer from './Footer';
-class Important extends Component {
+class Notification extends Component {
   state = {
     news: news,
     searchText: '',
@@ -33,7 +33,7 @@ class Important extends Component {
         item.summary.match(regex) ||
         item.context.match(regex) ||
         item.description.match(regex)
-      ) && item.important;
+      ) ;
     }).sort((a, b) => b.id - a.id);
     if (filteredNews.length === 0) {
       return <Text style={styles.noResultsText}>No results found</Text>;
@@ -122,7 +122,7 @@ class Important extends Component {
 
         });
         
-        export default Important;
+        export default Notification;
         
         
         

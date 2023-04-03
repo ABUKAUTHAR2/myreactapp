@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { MaterialIcons } from '@expo/vector-icons';
+import news from './newsData';
 
 class Footer extends Component {
+    state = {
+        news: news,
+      }
     render(){
         
         return(
             <View style={styles.footer}>
             <TouchableOpacity><Icon name="home" size={30} style={styles.footerIcon} color="#fff" onPress={() => this.props.navigation.navigate('ViewNews')} /></TouchableOpacity> 
             <TouchableOpacity><Icon name="search" size={25} style={styles.footerIcon} color="#fff" onPress={() => this.props.navigation.navigate('Tsearch')}/></TouchableOpacity> 
-            <TouchableOpacity><Icon name="bell" size={25} style={styles.footerIcon} color="#fff" /></TouchableOpacity> 
-            <TouchableOpacity><Icon name="user" size={25} style={styles.footerIcon} color="#fff" /></TouchableOpacity> 
+            <TouchableOpacity onPress={() =>this.props.navigation.navigate('Notification')}><Icon name="bell" size={25} style={styles.footerIcon} color="#fff" /></TouchableOpacity> 
+            <TouchableOpacity onPress={() =>this.props.navigation.navigate('Profile')}><Icon name="user" size={25} style={styles.footerIcon} color="#fff" /></TouchableOpacity> 
    </View>
         )
             

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Signup from './Signup';
 import Login from './Login';
 import AddNews from './AddNews';
@@ -8,25 +9,141 @@ import ViewNews from './ViewNews';
 import Tsearch from './Tsearch';
 import Tselectednew from './Tselectednew';
 import Importantrr from './Importantrr';
+import Notification from './Notification';
+import Footer from './Footer';
+import Settings from './Settings';
+import Helpandfeedback from './Helpandfeedback';
+import TeamKiutso from './TeamKiutso';
+import Profile from './Profile';
 
 const Stack = createNativeStackNavigator();
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isAuthenticated: false, // by default user is not authenticated
+    };
+  }
+
+  componentDidMount() {
+    // Check if user is authenticated
+    this.checkAuthentication();
+  }
+
+  async checkAuthentication() {
+    try {
+      const value = await AsyncStorage.getItem('isAuthenticated');
+      if (value !== null) {
+        // Value exists, user is authenticated
+        this.setState({ isAuthenticated: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async setAuthentication() {
+    try {
+      await AsyncStorage.setItem('isAuthenticated', 'true');
+      this.setState({ isAuthenticated: true });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async clearAuthentication() {
+    try {
+      await AsyncStorage.removeItem('isAuthenticated');
+      this.setState({ isAuthenticated: false });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name='Signup' component={Signup}/>
-          <Stack.Screen name='AddNews' component={AddNews}/>
-          <Stack.Screen name='ViewNews' component={ViewNews}/>
-          <Stack.Screen name="Importantrr" component={Importantrr} />
-          <Stack.Screen name="Tsearch" component={Tsearch} />
-        <Stack.Screen name="Tselectednew" component={Tselectednew} />
-        
-        </Stack.Navigator>
-      </NavigationContainer>
+  <Stack.Navigator>
+    {!this.state.isAuthenticated ? (
+      <>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ title: 'Login' }}
+          initialParams={{ setAuthentication: () => this.setAuthentication() }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{ title: 'Signup' }}
+        />
+      </>
+    ) : (
+      <>
+        <Stack.Screen
+          name="Footer"
+          component={Footer}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddNews"
+          component={AddNews}
+          options={{ title: 'Add News' }}
+        />
+        <Stack.Screen
+          name="ViewNews"
+          component={ViewNews}
+          options={{ title: 'View News' }}
+        />
+        <Stack.Screen
+          name="Importantrr"
+          component={Importantrr}
+          options={{ title: 'Important RR' }}
+        />
+        <Stack.Screen
+          name="Tsearch"
+          component={Tsearch}
+          options={{ title: 'Search News' }}
+        />
+        <Stack.Screen
+          name="Tselectednew"
+          component={Tselectednew}
+          options={{ title: 'Selected News' }}
+        />
+        <Stack.Screen
+          name="Notification"
+          component={Notification}
+          options={{ title: 'Notifications' }}
+        />
+        <Stack.Screen
+          name="Helpandfeedback"
+          component={Helpandfeedback}
+          options={{ title: 'Help & Feedback' }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
+          options={{ title: 'Settings' }}
+        />
+        <Stack.Screen
+          name="TeamKiutso"
+          component={TeamKiutso}
+          options={{ title: 'Team Kiutso' }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ title: 'Profile' }}
+        />
+      </>
+    )}
+  </Stack.Navigator>
+</NavigationContainer>
+
     );
   }
+  
 }
 
 export default App;

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, Share, Image,Platform,Alert, CameraRoll,  StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
+import { View,
+   Text, Share, Image,  StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-//import  from 'react-native-share';
+
 
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
@@ -58,39 +59,35 @@ class ViewNews extends Component {
     const regex = new RegExp(searchText, 'i');
     return news.filter((item) => regex.test(item.summary));
   };
-
   handleHearticon = (id) => {
-  this.setState(prevState => {
-    const news = prevState.news.map(item => {
-      if (item.id === id) {
-        const likes = prevState[item.id]?.likes ?? 0; // check if likes exists in state, default to 0 if not
-        const newLikes = likes + (item.liked ? -1 : 1); // toggle between adding and subtracting 1
-        return { ...item, likes: newLikes, liked: !item.liked }; // update likes count and toggle liked state
-      } else {
-        return item;
-      }
-    });
-    return { ...prevState, news };
-  });
-}
-
-  handleDearticon = (id) => {
     this.setState(prevState => {
       const news = prevState.news.map(item => {
         if (item.id === id) {
-          const likes = prevState[item.id]?.likes ?? 0; // check if likes exists in state, default to 0 if not
-          return { ...item, likes: prevState.searchEnabled ? 0 : (likes + 1) }; // if search is enabled, reset likes to 0, otherwise increment by 1
+          const newLikes = item.liked ? item.likes - 1 : item.likes + 1; // toggle between adding and subtracting 1
+          return { ...item, likes: newLikes, liked: !item.liked }; // update likes count and toggle liked state
         } else {
           return item;
         }
       });
       return { ...prevState, news };
     });
-  };
-  handleDoubleTap = (id) => {
-    // Call handleHearticon function when double tap occurs
-    this.handleDearticon(id);
-  };
+  }
+  handleImageDoubleClick = (id) => {
+    this.setState(prevState => {
+      const news = prevState.news.map(item => {
+        if (item.id === id) {
+          const likes = prevState[item.id]?.likes ?? 0; // check if likes exists in state, default to 0 if not
+          return { ...item, likes: likes + 1 }; // increment likes count by 1
+        } else {
+          return item;
+        }
+      });
+      return { ...prevState, news };
+    });
+  }
+  
+  
+
   toggleMenu = () => {
     this.setState(prevState => ({ menuOpen: !prevState.menuOpen }));
   };
@@ -140,7 +137,7 @@ class ViewNews extends Component {
         <ScrollView style={styles.newsContainer}>
           {news.map(item => (
             <View key={item.id} style={styles.newsItem}>
-             <TouchableOpacity onPress={() => this.handleDoubleTap(item.id)} ><Image source={item.image} style={styles.newsImage} resizeMode="cover" /></TouchableOpacity>
+             <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} ><Image source={item.image} style={styles.newsImage} resizeMode="cover" /></TouchableOpacity>
               <View style={styles.newsFooter}>
                 <View style={styles.newsIcons}>
                 <TouchableOpacity key={item.id} onPress={() => this.handleHearticon(item.id)}><Icon name="heart" size={20} style={styles.icon} color="red" /></TouchableOpacity>
@@ -150,7 +147,7 @@ class ViewNews extends Component {
                  <TouchableOpacity key={item.id} onPress={() => this.onShare(item.id)} ><Icon name="share-alt" size={20} style={styles.icon} color="black" /></TouchableOpacity> 
                 </View>
                 <View style={styles.newsIcons}>
-                 <TouchableOpacity onPress={() => navigation.navigate('Important')}><Icon name="star" size={20} style={styles.icon} color="#4CAF50" /></TouchableOpacity>  
+                 <TouchableOpacity onPress={() =>this.props.navigation.navigate('Importantrr')}><Icon name="star" size={20} style={styles.icon} color="#4CAF50" /></TouchableOpacity>  
               </View>
               </View>
               <Text style={styles.newsContext}>{item.context}</Text>
@@ -211,8 +208,10 @@ class ViewNews extends Component {
       style={{
         borderRadius: 5,
         padding: 10,
-       
-      }}
+      }
+      
+    }
+    onPress={() =>this.props.navigation.navigate('Settings')}
     >
       <View
         style={{
@@ -237,6 +236,7 @@ class ViewNews extends Component {
         padding: 10,
        
       }}
+      onPress={() =>this.props.navigation.navigate('Notification')}
     >
       <View
         style={{
@@ -257,10 +257,11 @@ class ViewNews extends Component {
     </TouchableOpacity>
     <TouchableOpacity
       style={{
-        borderRadius: 5,
+        borderRadius: 5,  
         padding: 10,
        
       }}
+      onPress={() =>this.props.navigation.navigate('Helpandfeedback')}
     >
       <View
         style={{
@@ -286,6 +287,7 @@ class ViewNews extends Component {
         padding: 10,
        
       }}
+      onPress={() =>this.props.navigation.navigate('TeamKiutso')}
     >
       <View
         style={{

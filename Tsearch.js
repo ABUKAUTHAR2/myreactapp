@@ -1,4 +1,3 @@
-//this is reall
 import React, { Component } from 'react';
 import {
   View,
@@ -36,8 +35,8 @@ class Tsearch extends Component {
         item.summary.match(regex) ||
         item.context.match(regex) ||
         item.description.match(regex)
-      );
-    });
+      ) ;
+    }).sort((a, b) => b.id - a.id);
     if (filteredNews.length === 0) {
       return <Text style={styles.noResultsText}>No results found</Text>;
     }
