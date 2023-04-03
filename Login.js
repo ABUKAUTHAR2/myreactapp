@@ -20,7 +20,7 @@ export default class Login extends Component {
     if (user) {
       const token = 'loggedIn';
       await AsyncStorage.setItem('userToken', token);
-      this.props.navigation.navigate('ViewNews');
+      this.props.navigation.navigate('Profile', { username, email, isAuthenticated: true });
     } else if (email === '00000' && password === '00000') {
       const token = 'admin';
       await AsyncStorage.setItem('userToken', token);

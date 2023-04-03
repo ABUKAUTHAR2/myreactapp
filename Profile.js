@@ -1,118 +1,56 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text,StyleSheet, TouchableOpacity } from 'react-native';
 
-class Profile extends Component {
-  state = {
-    isOnline: true,
-    username: 'John Doe',
-    email: 'johndoe@example.com',
-    profileImage: require('./assets/muba.png')
-  }
 
-  toggleOnlineStatus = () => {
-    this.setState(prevState => ({ isOnline: !prevState.isOnline }));
-  }
-
+export default class Profile extends Component {
   render() {
-    const { isOnline, username, email, profileImage } = this.state;
+    const { route, navigation } = this.props;
+    const { username, email, clearAuthentication } = route.params;
 
     return (
       <View style={styles.container}>
-        <View style={styles.profileHeader}>
-          <TouchableOpacity style={styles.cameraButton}>
-            <Image source={require('./assets/SIK.png')} style={styles.cameraIcon} />
-          </TouchableOpacity>
-          <Image source={profileImage} style={styles.profileImage} />
-          <TouchableOpacity onPress={this.toggleOnlineStatus} style={[styles.onlineStatus, isOnline ? styles.online : styles.offline]} />
-        </View>
-        <View style={styles.profileDetails}>
-          <Text style={styles.username}>{username}</Text>
-          <Text style={styles.email}>{email}</Text>
-        </View>
-        <TouchableOpacity style={styles.logoutButton}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
+        <Text style={styles.title}>Profile</Text>
+        <Text style={styles.text}>Username: {username}</Text>
+        <Text style={styles.text}>Email: {email}</Text>
+        <TouchableOpacity
+  style={styles.button}
+  onPress={() => navigation.navigate('Login', { isAuthenticated: false })}
+>
+  <Text style={styles.buttonText}>Logout</Text>
+</TouchableOpacity>
       </View>
     );
   }
 }
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop: 150,
+    justifyContent: 'center',
+    padding: 20
   },
-  profileHeader: {
-    alignItems: 'center'
-  },
-  profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginTop: -75,
-    marginBottom: 10
-  },
-  cameraButton: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#4CAF50',
-    borderRadius: 20,
-    padding: 10,
-    margin: 10
-  },
-  cameraIcon: {
-    width: 20,
-    height: 20,
-    tintColor: '#fff'
-  },
-  onlineStatus: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    margin: 10,
-    borderWidth: 2,
-    borderColor: '#fff'
-  },
-  online: {
-    backgroundColor: '#4CAF50'
-  },
-  offline: {
-    backgroundColor: '#ccc'
-  },
-  profileDetails: {
-    alignItems: 'center',
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
     marginBottom: 20
   },
-  username: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center'
+  text: {
+    fontSize: 20,
+    marginBottom: 10
   },
-  email: {
-    fontSize: 18,
-    color: '#4CAF50',
-    textAlign: 'center'
+  button: {
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 20
   },
-  logoutButton: {
-    backgroundColor: '#FF5733',
-    borderRadius: 10,
-    padding: 10,
-    alignSelf: 'stretch'
-  },
-  logoutButtonText: {
+  buttonText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    fontSize: 20,
+    fontWeight: 'bold'
   }
 });
-
-export default Profile;

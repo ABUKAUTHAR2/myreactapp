@@ -1,44 +1,118 @@
 import React, { Component } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Signup from './Signup';
-import Login from './Login';
-import AddNews from './AddNews';
-import ViewNews from './ViewNews';
-import Tsearch from './Tsearch';
-import Tselectednew from './Tselectednew';
-import Importantrr from './Importantrr';
-import Notification from './Notification';
-import Footer from './Footer';
-import Settings from './Settings';
-import Helpandfeedback from './Helpandfeedback';
-import TeamKiutso from './TeamKiutso';
-import Profile from './Profile';
-const Stack = createNativeStackNavigator();
-class App extends Component {
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+
+class Profile extends Component {
+  state = {
+    isOnline: true,
+    username: 'John Doe',
+    email: 'johndoe@example.com',
+    profileImage: require('./assets/muba.png')
+  }
+
+  toggleOnlineStatus = () => {
+    this.setState(prevState => ({ isOnline: !prevState.isOnline }));
+  }
+
   render() {
+    const { isOnline, username, email, profileImage } = this.state;
+
     return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name='Signup' component={Signup}/>
-          <Stack.Screen name='AddNews' component={AddNews}/>
-          <Stack.Screen name="Footer" component={Footer} />
-          <Stack.Screen name='ViewNews' component={ViewNews}/>
-          <Stack.Screen name="Importantrr" component={Importantrr} />
-          <Stack.Screen name="Tsearch" component={Tsearch} />
-        <Stack.Screen name="Tselectednew" component={Tselectednew} />
-        <Stack.Screen name="Notification" component={Notification} />
-        <Stack.Screen name="Helpandfeedback" component={Helpandfeedback} />
-        <Stack.Screen name="Settings" component={Settings} />
-        <Stack.Screen name="TeamKiutso" component={TeamKiutso} />
-        <Stack.Screen name="Profile" component={Profile} />
-               
-        
-        </Stack.Navigator>
-      </NavigationContainer>
+      <View style={styles.container}>
+        <View style={styles.profileHeader}>
+          <TouchableOpacity style={styles.cameraButton}>
+            <Image source={require('./assets/SIK.png')} style={styles.cameraIcon} />
+          </TouchableOpacity>
+          <Image source={profileImage} style={styles.profileImage} />
+          <TouchableOpacity onPress={this.toggleOnlineStatus} style={[styles.onlineStatus, isOnline ? styles.online : styles.offline]} />
+        </View>
+        <View style={styles.profileDetails}>
+          <Text style={styles.username}>{username}</Text>
+          <Text style={styles.email}>{email}</Text>
+        </View>
+        <TouchableOpacity style={styles.logoutButton}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#f8f8f8',
+    alignItems: 'center',
+    paddingTop: 150,
+  },
+  profileHeader: {
+    alignItems: 'center'
+  },
+  profileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginTop: -75,
+    marginBottom: 10
+  },
+  cameraButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#4CAF50',
+    borderRadius: 20,
+    padding: 10,
+    margin: 10
+  },
+  cameraIcon: {
+    width: 20,
+    height: 20,
+    tintColor: '#fff'
+  },
+  onlineStatus: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    margin: 10,
+    borderWidth: 2,
+    borderColor: '#fff'
+  },
+  online: {
+    backgroundColor: '#4CAF50'
+  },
+  offline: {
+    backgroundColor: '#ccc'
+  },
+  profileDetails: {
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  username: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+  email: {
+    fontSize: 18,
+    color: '#4CAF50',
+    textAlign: 'center'
+  },
+  logoutButton: {
+    backgroundColor: '#FF5733',
+    borderRadius: 10,
+    padding: 10,
+    alignSelf: 'stretch'
+  },
+  logoutButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }
+});
+
+export default Profile;

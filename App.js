@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from 'react-native';
+
 import Signup from './Signup';
 import Login from './Login';
 import AddNews from './AddNews';
@@ -43,15 +45,15 @@ class App extends Component {
     }
   }
 
-  async setAuthentication() {
+  async setAuthentication(email, username) {
     try {
       await AsyncStorage.setItem('isAuthenticated', 'true');
-      this.setState({ isAuthenticated: true });
+      this.setState({ isAuthenticated: true, email, username });
     } catch (error) {
       console.log(error);
     }
   }
-
+  
   async clearAuthentication() {
     try {
       await AsyncStorage.removeItem('isAuthenticated');
@@ -127,10 +129,18 @@ class App extends Component {
           options={{ title: 'Team Kiutso' }}
         />
         <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{ title: 'Profile' }}
-        />
+  name="Profile"
+  component={Profile}
+  options={{
+    title: 'Profile',
+    headerRight: () => (
+      <Button title="Logout" onPress={() => this.clearAuthentication()} />
+    ),
+  }}
+  initialParams={{ username: this.state.username, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
+/>
+
+
       </>
     ) : (
       <>
