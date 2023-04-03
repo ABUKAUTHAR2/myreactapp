@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text,Image, View, TextInput, TouchableOpacity } from 'react-native';
-import  Credentials  from './Passwords'; // Import Credentials array from Password.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Credentials from './Passwords'; 
 
 export default class Login extends Component {
   constructor(props) {
@@ -31,15 +30,18 @@ export default class Login extends Component {
     }
   };
   
-
-
+  setAuthentication = () => {
+    this.props.navigation.setParams({ isAuthenticated: true });
+  }
+  
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <Image
-              source={require('./assets/kiutsologo.png')}
-              style={styles.logoimage}
-            />
+          source={require('./assets/kiutsologo.png')}
+          style={styles.logoimage}
+        />
         <Text style={styles.logo}>KIUTSO APP</Text>
         
         <View style={styles.inputView}>
@@ -66,7 +68,7 @@ export default class Login extends Component {
           <Text style={styles.signupText}>Don't have an account? Signup</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginBtn}  onPress={() => this.props.navigation.navigate('ViewNews')}>
+        <TouchableOpacity style={styles.loginBtn}  onPress={() => navigation.navigate('ViewNews')}>
           <Text style={styles.loginText} >DELETE</Text>
         </TouchableOpacity>
 
@@ -74,6 +76,9 @@ export default class Login extends Component {
     );
   }
 }
+
+
+
 
 
 const styles = StyleSheet.create({

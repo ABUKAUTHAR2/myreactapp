@@ -64,48 +64,43 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer>
-  <Stack.Navigator>
-    {!this.state.isAuthenticated ? (
-      <>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ title: 'Login' }}
-          initialParams={{ setAuthentication: () => this.setAuthentication() }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={Signup}
-          options={{ title: 'Signup' }}
-        />
-      </>
-    ) : (
-      <>
-        <Stack.Screen
-          name="Footer"
-          component={Footer}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AddNews"
-          component={AddNews}
-          options={{ title: 'Add News' }}
-        />
-        <Stack.Screen
-          name="ViewNews"
-          component={ViewNews}
-          options={{ title: 'View News' }}
-        />
-        <Stack.Screen
-          name="Importantrr"
-          component={Importantrr}
-          options={{ title: 'Important RR' }}
-        />
-        <Stack.Screen
-          name="Tsearch"
-          component={Tsearch}
-          options={{ title: 'Search News' }}
-        />
+        <Stack.Navigator>
+          {!this.state.isAuthenticated ? (
+            <>
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ title: 'Login' }}
+                initialParams={{ isAuthenticated: this.state.isAuthenticated }}
+              />
+              <Stack.Screen
+                name="Signup"
+                component={Signup}
+                options={{ title: 'Signup' }}
+              />
+              <Stack.Screen
+                name="Footer"
+                component={Footer}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AddNews"
+                component={AddNews}
+                options={{ title: 'Add News' }}
+              />
+              <Stack.Screen name='ViewNews' component={ViewNews}/>
+              <Stack.Screen
+                name="Importantrr"
+                component={Importantrr}
+                options={{ title: 'Important RR' }}
+              />
+              <Stack.Screen
+                name="Tsearch"
+                component={Tsearch}
+                options={{ title: 'Search News' }}
+                // Pass the authentication status down to the child component
+                initialParams={{ isAuthenticated: this.state.isAuthenticated }}
+              />
         <Stack.Screen
           name="Tselectednew"
           component={Tselectednew}
@@ -136,6 +131,10 @@ class App extends Component {
           component={Profile}
           options={{ title: 'Profile' }}
         />
+      </>
+    ) : (
+      <>
+       
       </>
     )}
   </Stack.Navigator>
