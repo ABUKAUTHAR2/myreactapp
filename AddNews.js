@@ -97,6 +97,7 @@ ${description});`);
 
 render() {
 const { context, fileData, summary, description, date, contextError, fileDataError, summaryError, descriptionError, dateError } = this.state;
+const { navigation } = this.props;
 return (
 <View style={styles.container}>
 <Text style={styles.title}>Add News</Text>
@@ -135,6 +136,9 @@ return (
 {dateError !== '' && <Text style={styles.error}>{dateError}</Text>}
 <TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
 <Text style={styles.buttonText}>Submit</Text>
+</TouchableOpacity>
+<TouchableOpacity style={styles.button}  onPress={() => navigation.navigate('Leaders')}>
+<Text style={styles.buttonText}>See leaders</Text>
 </TouchableOpacity>
 </View>
 </View>

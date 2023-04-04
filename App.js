@@ -17,6 +17,7 @@ import Settings from './Settings';
 import Helpandfeedback from './Helpandfeedback';
 import TeamKiutso from './TeamKiutso';
 import Profile from './Profile';
+import Leaders from './Leaderslist';
 
 const Stack = createNativeStackNavigator();
 
@@ -94,7 +95,7 @@ class App extends Component {
               <Stack.Screen
                 name="Importantrr"
                 component={Importantrr}
-                options={{ title: 'Important RR' }}
+                options={{ title: 'Important' }}
               />
               <Stack.Screen
                 name="Tsearch"
@@ -139,6 +140,12 @@ class App extends Component {
   }}
   initialParams={{ username: this.state.username, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
 />
+
+<Stack.Screen
+          name="Leaders"
+          component={Leaders}
+          options={{ title: 'Leaders' }}
+        />
 
 
       </>

@@ -12,23 +12,37 @@ export default class Login extends Component {
     };
   }
 
-  handleLogin = async () => {
-    const { email, password } = this.state;
-    const user = Credentials.find(
-      (u) => u.email === email && u.password === password
-    );
-    if (user) {
-      const token = 'loggedIn';
-      await AsyncStorage.setItem('userToken', token);
-      this.props.navigation.navigate('Profile', { username, email, isAuthenticated: true });
-    } else if (email === '00000' && password === '00000') {
-      const token = 'admin';
-      await AsyncStorage.setItem('userToken', token);
-      this.props.navigation.navigate('AddNews');
-    } else {
-      alert('Invalid email or password');
-    }
-  };
+
+
+handleLogin = async () => {
+  const { email, password } = this.state;
+  const user = Credentials.find((u) => u.email === email && u.password === password);
+  if (user) {
+    const userData = JSON.stringify({
+      email: user.email,
+      username: user.username,
+      Image:user.image,
+    });
+    await AsyncStorage.setItem('userData', userData);
+    const token = 'loggedIn';
+    await AsyncStorage.setItem('userToken', token);
+    this.props.navigation.navigate('ViewNews', {
+      isAuthenticated: true,
+      email: user.email,
+      username: user.username,
+    });
+  } else if (email === '00000' && password === '00000') {
+    const token = 'admin';
+    await AsyncStorage.setItem('userToken', token);
+    this.props.navigation.navigate('AddNews');
+  } else {
+    alert('Invalid email or password');
+  }
+};
+
+  
+
+
   
   setAuthentication = () => {
     this.props.navigation.setParams({ isAuthenticated: true });
@@ -42,7 +56,7 @@ export default class Login extends Component {
           source={require('./assets/kiutsologo.png')}
           style={styles.logoimage}
         />
-        <Text style={styles.logo}>KIUTSO APP</Text>
+        <Text style={styles.logo}>KIUTSO NEWS APP</Text>
         
         <View style={styles.inputView}>
           <TextInput

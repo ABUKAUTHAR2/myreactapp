@@ -12,6 +12,12 @@ export const Kiutsodata = {
         "position": "Vice president",
         "phone": "+255 742 811 532"
       },
+      {
+        "image": require("./assets/ROBERT.png"),
+        "name": "ROBERT KATONGE",
+        "position": "Guild Speaker",
+        "phone": "+255 712 414 816"
+      },
       // ...
     ],
     "array2": [
