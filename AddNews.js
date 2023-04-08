@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput,StyleSheet } from 'react-native';
-import FileInput from './FileInput';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Image } from 'react-native';
+
+import * as ImagePicker from 'expo-image-picker';
 
 class AddNews extends Component {
   state = {
@@ -14,6 +15,7 @@ class AddNews extends Component {
     summaryError: '',
     descriptionError: '',
     dateError: '',
+    image: null,
   };
 
   handleContextChange = (context) => {
@@ -24,14 +26,31 @@ class AddNews extends Component {
     }
   };
 
-  handleFileDataChange = (fileData) => {
-    if (fileData) {
-      const fileDataError = fileData.size > 20 * 1024 * 1024 ? 'File size should be less than 20MB' : '';
-      this.setState({ fileData, fileDataError });
+  handleFileDataChange = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
+    }
+  
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      const selectedAsset = result.assets[0];
+      this.setState({ 
+        fileData: selectedAsset,
+        fileDataError: '',
+        image: selectedAsset.uri 
+      });
     } else {
       this.setState({ fileData: null, fileDataError: 'Please select a file' });
     }
   };
+  
 
   handleSummaryChange = (summary) => {
     if (summary.length <= 50) {
@@ -49,153 +68,177 @@ class AddNews extends Component {
     }
   };
 
-
-  
-
   handleSubmit = () => {
-    const { context, fileData, summary, description, date } = this.state;
+    const { image, context, summary, description, date } = this.state;
+  
     let contextError = '';
     let fileDataError = '';
     let summaryError = '';
     let descriptionError = '';
     let dateError = '';
-
+  
     if (context === '') {
       contextError = 'Please enter context';
     }
-
-    if (!fileData) {
-      fileDataError = 'Please select a  file';
-    } else if (fileData.size > 20 * 1024 * 1024) {
-      fileDataError = 'File size should be less than 20MB';
+  
+    if (!image) {
+      fileDataError = 'Please select a file';
     }
-
+  
     if (summary === '') {
       summaryError = 'Please enter summary';
     }
-
+  
     if (description === '') {
       descriptionError = 'Please enter description';
     }
-
-    
-    
-
+  
     if (contextError !== '' || fileDataError !== '' || summaryError !== '' || descriptionError !== '') {
       this.setState({ contextError, fileDataError, summaryError, descriptionError, dateError });
       return;
     }
+  
+    fetch('http://192.168.235.85:80/apis/addnews.php', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    image: image,
+    context: context,
+    summary: summary,
+    description: description,
+    date: date,
+  }),
+})
+  .then((response) => response.text())
+  .then((responseJson) => {
+    console.log(responseJson);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+  
 
-    console.log('News added successfully!');
-    console.log(`Context: ${context}`);
-    console.log(`File data: ${fileData.name}`);
-    console.log(`Summary:
-${summary}); console.log(Description:
-${description});`);
-// Additional code to send data to server or update state
-};
-
-render() {
-const { context, fileData, summary, description, date, contextError, fileDataError, summaryError, descriptionError, dateError } = this.state;
-const { navigation } = this.props;
-return (
-<View style={styles.container}>
-<Text style={styles.title}>Add News</Text>
-<View style={styles.form}>
-<Text style={styles.label}>Context (max 30 characters)</Text>
-<TextInput
-         style={styles.input}
-         value={context}
-         onChangeText={this.handleContextChange}
-         placeholder="Enter context"
-         maxLength={30}
-       />
-{contextError !== '' && <Text style={styles.error}>{contextError}</Text>}
-<FileInput  fileData={fileData} onChange={this.handleFileDataChange} />
-{fileDataError !== '' && <Text style={styles.error}>{fileDataError}</Text>}
-<Text style={styles.label}>Summary (max 50 words)</Text>
-<TextInput
-         style={styles.input}
-         value={summary}
-         onChangeText={this.handleSummaryChange}
-         placeholder="Enter summary"
-         maxLength={50}
-       />
-{summaryError !== '' && <Text style={styles.error}>{summaryError}</Text>}
-<Text style={styles.label}>Description (max 250 words)</Text>
-<TextInput
-         style={styles.input}
-         value={description}
-         onChangeText={this.handleDescriptionChange}
-         placeholder="Enter description"
-         maxLength={250}
-         multiline={true}
-         numberOfLines={5}
-       />
-{descriptionError !== '' && <Text style={styles.error}>{descriptionError}</Text>}
-{dateError !== '' && <Text style={styles.error}>{dateError}</Text>}
-<TouchableOpacity style={styles.button} onPress={this.handleSubmit}>
-<Text style={styles.buttonText}>Submit</Text>
-</TouchableOpacity>
-<TouchableOpacity style={styles.button}  onPress={() => navigation.navigate('Leaders')}>
-<Text style={styles.buttonText}>See leaders</Text>
-</TouchableOpacity>
-</View>
-</View>
-);
-}
-}
-
-const styles = StyleSheet.create({
-container: {
-flex: 1,
-backgroundColor: '#fff',
-alignItems: 'center',
-justifyContent: 'center',
-},
-title: {
-fontSize: 40,
-fontWeight: 'bold',
-marginBottom: 20,
-color:'#4CAF50'
-},
-form: {
-width: '80%',
-},
-label: {
-fontSize: 16,
-marginTop: 20,
-marginBottom: 10,
-},
-input: {
-borderWidth: 1,
-borderColor: '#ccc',
-borderRadius: 5,
-padding: 10,
-marginBottom: 20,
-},
-error: {
-color: 'red',
-marginBottom: 10,
-},
-button: {
-backgroundColor:'#4CAF50',
-padding: 10,
-borderRadius: 5,
-alignItems: 'center',
-marginTop: 20,
-},
-buttonText: {
-color: '#fff',
-fontSize: 18,
-},
-datePicker: {
-marginBottom: 20,
-},
-});
-
-export default AddNews;
-
-
-
-
+  };
+        
+      render() {
+      const { context, fileData, summary, description, contextError, fileDataError, summaryError, descriptionError } = this.state;
+      
+      return (
+        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+          <View style={styles.form}>
+            <Text style={styles.heading}>ADD NEWS TO THE APP DATABASE </Text>
+            <Text style={styles.label}>Context:</Text>
+            <TextInput
+              value={context}
+              onChangeText={this.handleContextChange}
+              placeholder="Enter context"
+              style={styles.input}
+            />
+            {contextError !== '' && <Text style={styles.error}>{contextError}</Text>}
+      
+            <Text style={styles.label}>File:</Text>
+            <TouchableOpacity onPress={this.handleFileDataChange} style={styles.input}>
+              <Text>Select a file</Text>
+            </TouchableOpacity>
+            {fileDataError !== '' && <Text style={styles.error}>{fileDataError}</Text>}
+      
+            {fileData && (
+              <View style={styles.imagePreview}>
+                <Image source={{ uri: fileData.uri }} style={styles.image} />
+              </View>
+            )}
+      
+            <Text style={styles.label}>Summary:</Text>
+            <TextInput
+              value={summary}
+              onChangeText={this.handleSummaryChange}
+              placeholder="Enter summary"
+              style={styles.input}
+            />
+            {summaryError !== '' && <Text style={styles.error}>{summaryError}</Text>}
+      
+            <Text style={styles.label}>Description:</Text>
+            <TextInput
+              value={description}
+              onChangeText={this.handleDescriptionChange}
+              placeholder="Enter description"
+              style={styles.input}
+              multiline
+              numberOfLines={5}
+            />
+            {descriptionError !== '' && <Text style={styles.error}>{descriptionError}</Text>}
+      
+            <TouchableOpacity onPress={this.handleSubmit} style={styles.button}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      );
+    }
+  }
+  
+  const styles = StyleSheet.create({
+  container: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  },
+  heading:{
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    marginVertical: 20,
+  }
+  ,
+  form: {
+  width: '80%',
+  },
+  label: {
+  marginVertical: 5,
+  },
+  input: {
+  borderWidth: 1,
+  borderColor: 'black',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
+  },
+  error: {
+  color: 'red',
+  marginBottom: 10,
+  },
+  button: {
+  backgroundColor: '#4CAF50',
+  padding: 10,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginTop: 10,
+  },
+  buttonText: {
+  color: 'white',
+  },
+  imagePreview: {
+  borderWidth: 1,
+  borderColor: 'black',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
+  alignItems: 'center',
+  },
+  image: {
+  width: 200,
+  height: 200,
+  },
+  });
+  
+  export default AddNews;
+  
+  
+  
+              

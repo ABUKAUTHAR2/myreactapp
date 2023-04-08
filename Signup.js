@@ -3,8 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 
 class Signup extends Component {
   state = {
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
     phone: '',
     password: '',
@@ -15,12 +15,12 @@ class Signup extends Component {
     confirmPasswordError: '',
   };
 
-  handleFirstNameChange = (firstName) => {
-    this.setState({ firstName });
+  handlefirst_nameChange = (first_name) => {
+    this.setState({ first_name });
   };
 
-  handleLastNameChange = (lastName) => {
-    this.setState({ lastName });
+  handlelast_nameChange = (last_name) => {
+    this.setState({ last_name });
   };
 
   handleEmailChange = (email) => {
@@ -59,59 +59,77 @@ class Signup extends Component {
   };
 
   handleSubmit = () => {
-    const { firstName, lastName, email, phone, password, confirmPassword } = this.state;
+    const { first_name, last_name, email, phone, password, confirmPassword } = this.state;
+  
     let passwordError = '';
     let confirmPasswordError = '';
-
-    if (firstName === '') {
+  
+    if (first_name === '') {
       alert('Please enter your first name');
       return;
     }
-
-    if (lastName === '') {
+  
+    if (last_name === '') {
       alert('Please enter your last name');
       return;
     }
-
+  
     if (email === '') {
       alert('Please enter your email');
       return;
     }
-
+  
     if (!this.validateEmail(email)) {
       alert('Please enter a valid email');
       return;
     }
-
+  
     if (phone === '') {
       alert('Please enter your phone number');
       return;
     }
-
+  
     if (password === '') {
       passwordError = 'Please enter a password';
     } else if (this.getPasswordStrength(password) === '') {
       passwordError = 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)';
     }
-
+  
     if (confirmPassword === '') {
       confirmPasswordError = 'Please confirm your password';
     } else if (password !== confirmPassword) {
       confirmPasswordError = 'Passwords do not match';
     }
-
+  
     if (passwordError !== '' || confirmPasswordError !== '') {
       this.setState({ passwordError, confirmPasswordError });
       return;
     }
-
-    console.log('Signup successful!');
-    console.log(`First name: ${firstName}`);
-    console.log(`Last name: ${lastName}`);
-    console.log(`Email: ${email}`);
-    console.log(`Phone: ${phone}`);
-    console.log(`Password: ${password}`);
+  
+    // Send data to PHP script
+    fetch('http://192.168.235.85:80/apis/signup.php', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        phone: phone,
+        password: password,
+      }),
+    })
+      .then((response) => response.text())
+      .then((responseJson) => {
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+  
 
   validateEmail = (email)=> {
 const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
@@ -120,8 +138,8 @@ return emailRegex.test(email);
 
 render() {
 const {
-firstName,
-lastName,
+first_name,
+last_name,
 email,
 phone,
 password,
@@ -140,16 +158,16 @@ return (
       <TextInput
         style={styles.input}
         placeholder="First name"
-        onChangeText={this.handleFirstNameChange}
-        value={firstName}
+        onChangeText={this.handlefirst_nameChange}
+        value={first_name}
       />
     </View>
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
         placeholder="Last name"
-        onChangeText={this.handleLastNameChange}
-        value={lastName}
+        onChangeText={this.handlelast_nameChange}
+        value={last_name}
       />
     </View>
     <View style={styles.inputContainer}>

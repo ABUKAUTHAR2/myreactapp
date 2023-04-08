@@ -1,119 +1,238 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { Kiutsodata } from './Kiutsodata';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Image } from 'react-native';
 
-class Leaders extends Component {
+import * as ImagePicker from 'expo-image-picker';
+
+class AddNews extends Component {
   state = {
-    leaders: Kiutsodata.array1.concat(Kiutsodata.array2),
+    context: '',
+    fileData: null,
+    summary: '',
+    description: '',
+    date: new Date(),
+    contextError: '',
+    fileDataError: '',
+    summaryError: '',
+    descriptionError: '',
+    dateError: '',
+    image: null,
   };
 
-  handleDelete = (index) => {
-    const { leaders } = this.state;
-    leaders.splice(index, 1);
-    this.setState({ leaders });
+  handleContextChange = (context) => {
+    if (context.length <= 30) {
+      this.setState({ context, contextError: '' });
+    } else {
+      this.setState({ contextError: 'Context should be less than 30 characters' });
+    }
   };
 
-  handleAdd = () => {
-    const { leaders } = this.state;
-    const newLeader = {
-      image: require('./assets/vucu.png'),
-      name: 'NEW LEADER',
-      position: 'NEW POSITION',
-      phone: '+255 XXX XXX XXX',
-    };
-    this.setState({ leaders: [newLeader, ...leaders] });
+  handleFileDataChange = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+      return;
+    }
+  
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
+  
+    if (!result.canceled) {
+      const selectedAsset = result.assets[0];
+      this.setState({ 
+        fileData: selectedAsset,
+        fileDataError: '',
+        image: selectedAsset.uri 
+      });
+    } else {
+      this.setState({ fileData: null, fileDataError: 'Please select a file' });
+    }
+  };
+  
+
+  handleSummaryChange = (summary) => {
+    if (summary.length <= 50) {
+      this.setState({ summary, summaryError: '' });
+    } else {
+      this.setState({ summaryError: 'Summary should be less than 50 words' });
+    }
   };
 
-  renderLeader = ({ item, index }) => (
-    <View style={styles.leaderContainer}>
-      <Image source={item.image} style={styles.leaderImage} />
-      <View style={styles.leaderDetails}>
-        <Text style={styles.leaderName}>{item.name}</Text>
-        <Text style={styles.leaderPosition}>{item.position}</Text>
-        <Text style={styles.leaderPhone}>{item.phone}</Text>
-      </View>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => this.handleDelete(index)}>
-        <Text style={styles.deleteButtonText}>DELETE</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  handleDescriptionChange = (description) => {
+    if (description.length <= 250) {
+      this.setState({ description, descriptionError: '' });
+    } else {
+      this.setState({ descriptionError: 'Description should be less than 250 words' });
+    }
+  };
 
-  render() {
-    const { leaders } = this.state;
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.addButton} onPress={this.handleAdd}>
-          <Text style={styles.addButtonText}>ADD NEW LEADER</Text>
-        </TouchableOpacity>
-        <FlatList
-          data={leaders}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={this.renderLeader}
-        />
-      </View>
-    );
+  handleSubmit = () => {
+    const { image, context, summary, description, date } = this.state;
+
+    let contextError = '';
+    let fileDataError = '';
+    let summaryError = '';
+    let descriptionError = '';
+    let dateError = '';
+
+    if (context === '') {
+      contextError = 'Please enter context';
+    }
+
+    if (!image) {
+      fileDataError = 'Please select a file';
+    }
+
+    if (summary === '') {
+      summaryError = 'Please enter summary';
+    }
+
+    if (description === '') {
+      descriptionError = 'Please enter description';
+    }
+
+    if (contextError !== '' || fileDataError !== '' || summaryError !== '' || descriptionError !== '') {
+      this.setState({ contextError, fileDataError, summaryError, descriptionError, dateError });
+      return;
+    }
+
+    fetch('http://192.168.235.85:80/apis/addnews.php', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    image: image,
+    context: context,
+    summary: summary,
+    description: description,
+    date: date,
+  }),
+})
+  .then((response) => response.text()) // Parse response as text first
+  .then((responseText) => {
+    try {
+      const responseJson = JSON.parse(responseText); // Try to parse response as JSON
+      console.log(responseJson);
+      // Do something with the response
+    } catch (e) {
+      console.error('JSON Parse error:', e);
+      // Handle parsing error
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+  });
   }
-}
-
-const styles = StyleSheet.create({
+      
+      render() {
+      const { context, fileData, summary, description, contextError, fileDataError, summaryError, descriptionError } = this.state;
+      
+      return (
+        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+          <View style={styles.form}>
+            <Text style={styles.label}>Context:</Text>
+            <TextInput
+              value={context}
+              onChangeText={this.handleContextChange}
+              placeholder="Enter context"
+              style={styles.input}
+            />
+            {contextError !== '' && <Text style={styles.error}>{contextError}</Text>}
+      
+            <Text style={styles.label}>File:</Text>
+            <TouchableOpacity onPress={this.handleFileDataChange} style={styles.input}>
+              <Text>Select a file</Text>
+            </TouchableOpacity>
+            {fileDataError !== '' && <Text style={styles.error}>{fileDataError}</Text>}
+      
+            {fileData && (
+              <View style={styles.imagePreview}>
+                <Image source={{ uri: fileData.uri }} style={styles.image} />
+              </View>
+            )}
+      
+            <Text style={styles.label}>Summary:</Text>
+            <TextInput
+              value={summary}
+              onChangeText={this.handleSummaryChange}
+              placeholder="Enter summary"
+              style={styles.input}
+            />
+            {summaryError !== '' && <Text style={styles.error}>{summaryError}</Text>}
+      
+            <Text style={styles.label}>Description:</Text>
+            <TextInput
+              value={description}
+              onChangeText={this.handleDescriptionChange}
+              placeholder="Enter description"
+              style={styles.input}
+              multiline
+              numberOfLines={5}
+            />
+            {descriptionError !== '' && <Text style={styles.error}>{descriptionError}</Text>}
+      
+            <TouchableOpacity onPress={this.handleSubmit} style={styles.button}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      );
+    }
+  }
+  
+  const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#4CAF50',
-    paddingHorizontal: 20,
-    paddingTop: 50,
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
   },
-  addButton: {
-    backgroundColor: '#FF0000',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
+  form: {
+  width: '80%',
   },
-  addButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    textAlign: 'center',
+  label: {
+  marginVertical: 5,
   },
-  leaderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 10,
+  input: {
+  borderWidth: 1,
+  borderColor: 'black',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
   },
-  leaderImage: {
-    width: 80,
-    height: 80,
-    marginRight: 20,
-    borderRadius: 40,
+  error: {
+  color: 'red',
+  marginBottom: 10,
   },
-  leaderDetails: {
-    flex: 1,
+  button: {
+  backgroundColor: 'blue',
+  padding: 10,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginTop: 10,
   },
-  leaderName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 5,
+  buttonText: {
+  color: 'white',
   },
-  leaderPosition: {
-    fontSize: 14,
-    color: '#757575',
-    marginBottom: 5,
+  imagePreview: {
+  borderWidth: 1,
+  borderColor: 'black',
+  borderRadius: 5,
+  padding: 10,
+  marginBottom: 10,
+  alignItems: 'center',
   },
-  leaderPhone: {
-    fontSize: 14,
-    color: '#757575',
+  image: {
+  width: 200,
+  height: 200,
   },
-  deleteButton: {
-    backgroundColor: '#FF0000',
-    padding: 10,
-    borderRadius: 5,
-  },
-  deleteButtonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
-export default Leaders
+  });
+  
+  export default AddNews;
+  
+  
+  
+              

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { Kiutsodata } from './Kiutsodata';
 
 export default class Leader extends Component {
@@ -37,7 +37,7 @@ export default class Leader extends Component {
   render() {
     const { selectedArray, leaders, newLeaderName, newLeaderPosition, newLeaderPhone } = this.state;
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.arrayButton, selectedArray === 'array1' && styles.selectedArrayButton]}
@@ -57,7 +57,7 @@ export default class Leader extends Component {
         <View style={styles.leadersList}>
           {leaders.map((leader, index) => (
             <View key={index} style={styles.leader}>
-              <Image source={leader.image} style={styles.leaderImage} />
+              <Image source={leader.image} style={styles.leaderImage} resizeMode="contain" />
               <View style={styles.leaderInfo}>
                 <Text style={styles.leaderName}>{leader.name}</Text>
                 <Text style={styles.leaderPosition}>{leader.position}</Text>
@@ -72,127 +72,110 @@ export default class Leader extends Component {
           ))}
         </View>
         <View style={styles.newLeaderForm}>
-          <Text style={styles.newLeaderFormTitle}>Add New Leader:</Text>
-          <TextInput
-            style={styles.newLeaderFormField}
-            placeholder="Name"
-            value={newLeaderName}
-            onChangeText={(text) => this.setState({ newLeaderName: text })}
-          />
-          <TextInput
-            style={styles.newLeaderFormField}
-            placeholder="Position"
-            value={newLeaderPosition}
-            onChangeText={(text) => this.setState({ newLeaderPosition: text })}
-            />
-            <TextInput
-            style={styles.newLeaderFormField}
-            placeholder="Phone"
-            value={newLeaderPhone}
-            onChangeText={(text) => this.setState({ newLeaderPhone: text })}
-            />
-            <TouchableOpacity style={styles.addButton} onPress={this.handleAddLeader}>
-            <Text style={styles.addButtonLabel}>Add Leader</Text>
-            </TouchableOpacity>
+         
+            <TouchableOpacity
+                     style={styles.newLeaderFormButton}
+                     onPress={() =>this.props.navigation.navigate('AddLeader')}
+                   >
+            <Text style={styles.newLeaderFormButtonText}>Add Leader</Text>
+            </TouchableOpacity   >
             </View>
-            </View>
-            );
-            }
-            }
-            
-            const styles = StyleSheet.create({
-                container: {
-                  flex: 1,
-                  padding: 20,
-                  backgroundColor: '#F5FCFF',
-                },
-                buttonContainer: {
-                  flexDirection: 'row',
-                  marginBottom: 20,
-                },
-                arrayButton: {
-                  backgroundColor: '#4CAF50',
-                  paddingVertical: 10,
-                  paddingHorizontal: 20,
-                  borderRadius: 5,
-                  marginRight: 10,
-                },
-                selectedArrayButton: {
-                  backgroundColor: '#8BC34A',
-                },
-                arrayButtonText: {
-                  color: '#FFFFFF',
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                },
-                selectedArrayButtonText: {
-                  color: '#FFFFFF',
-                },
-                leadersList: {
-                  flex: 1,
-                },
-                leader: {
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: 10,
-                  padding: 10,
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: 5,
-                },
-                leaderImage: {
-                  width: 60,
-                  aspectRatio: 1,
-                  resizeMode: 'cover',
-                  marginRight: 10,
-                  borderRadius: 15,
-                },
-                leaderInfo: {
-                  flex: 1,
-                },
-                leaderName: {
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  marginBottom: 5,
-                },
-                leaderPosition: {
-                  fontSize: 16,
-                  fontStyle: 'italic',
-                  marginBottom: 5,
-                },
-                leaderPhone: {
-                  fontSize: 14,
-                  color: '#666666',
-                },
-                deleteButton: {
-                  backgroundColor: '#FF0000',
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  borderRadius: 5,
-                },
-                deleteButtonText: {
-                  color: '#FFFFFF',
-                  fontSize: 14,
-                  fontWeight: 'bold',
-                },
-                newLeaderForm: {
-                  marginBottom: 20,
-                },
-                newLeaderFormTitle: {
-                  fontSize: 18,
-                  fontWeight: 'bold',
-                  marginBottom: 10,
-                },
-                newLeaderFormField: {
-                  backgroundColor: '#FFFFFF',
-                  borderColor: '#CCCCCC',
-                  borderWidth: 1,
-                  borderRadius: 5,
-                  paddingVertical: 5,
-                  paddingHorizontal: 10,
-                  marginBottom: 10,
-                },
-              });
-              
-            
-            
-            
+            </ScrollView>)}}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  arrayButton: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#999',
+    backgroundColor: '#eee',
+  },
+  selectedArrayButton: {
+    backgroundColor: '#f5a623',
+    borderColor: '#f5a623',
+  },
+  arrayButtonText: {
+    fontWeight: 'bold',
+    color: '#999',
+  },
+  selectedArrayButtonText: {
+    color: '#fff',
+  },
+  leadersList: {
+    marginBottom: 20,
+  },
+  leader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 5,
+  },
+  leaderImage: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  leaderInfo: {
+    flex: 1,
+  },
+  leaderName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  leaderPosition: {
+    fontSize: 16,
+    color: '#777',
+  },
+  leaderPhone: {
+    fontSize: 16,
+    color: '#555',
+  },
+  deleteButton: {
+    padding: 10,
+    backgroundColor: '#f44336',
+    borderRadius: 5,
+  },
+  deleteButtonText: {
+    color: '#fff',
+  },
+  newLeaderForm: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    padding: 10,
+  },
+  newLeaderFormTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  newLeaderFormField: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  newLeaderFormButton: {
+    padding: 10,
+    backgroundColor: '#4caf50',
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  newLeaderFormButtonText: {
+    color: '#fff',
+  },
+});

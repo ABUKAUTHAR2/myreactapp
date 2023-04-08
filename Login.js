@@ -86,6 +86,11 @@ handleLogin = async () => {
           <Text style={styles.loginText} >DELETE</Text>
         </TouchableOpacity>
 
+        
+        <TouchableOpacity style={styles.loginBtn}  onPress={() => navigation.navigate('Login2')}>
+          <Text style={styles.loginText} >Login2</Text>
+        </TouchableOpacity>
+
       </View>
     );
   }
