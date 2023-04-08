@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text,Image, View, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Credentials from './Passwords'; 
+import Credentials from './Passwords';
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -9,40 +10,40 @@ export default class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      credentials: [],
     };
   }
 
-
-
-handleLogin = async () => {
-  const { email, password } = this.state;
-  const user = Credentials.find((u) => u.email === email && u.password === password);
-  if (user) {
-    const userData = JSON.stringify({
-      email: user.email,
-      username: user.username,
-      Image:user.image,
-    });
-    await AsyncStorage.setItem('userData', userData);
-    const token = 'loggedIn';
-    await AsyncStorage.setItem('userToken', token);
-    this.props.navigation.navigate('ViewNews', {
-      isAuthenticated: true,
-      email: user.email,
-      username: user.username,
-    });
-  } else if (email === '00000' && password === '00000') {
-    const token = 'admin';
-    await AsyncStorage.setItem('userToken', token);
-    this.props.navigation.navigate('AddNews');
-  } else {
-    alert('Invalid email or password');
+  async componentDidMount() {
+    const credentials = await Credentials();
+    this.setState({ credentials });
   }
-};
 
-  
-
-
+  handleLogin = async () => {
+    const { email, password, credentials } = this.state;
+    const user = credentials.find((u) => u.email === email && u.password === password);
+    if (user) {
+      const userData = JSON.stringify({
+        email: user.email,
+        username: user.username,
+        Image:user.image,
+      });
+      await AsyncStorage.setItem('userData', userData);
+      const token = 'loggedIn';
+      await AsyncStorage.setItem('userToken', token);
+      this.props.navigation.navigate('ViewNews', {
+        isAuthenticated: true,
+        email: user.email,
+        username: user.username,
+      });
+    } else if (email === '00000' && password === '00000') {
+      const token = 'admin';
+      await AsyncStorage.setItem('userToken', token);
+      this.props.navigation.navigate('AddNews');
+    } else {
+      alert('Invalid email or password');
+    }
+  };
   
   setAuthentication = () => {
     this.props.navigation.setParams({ isAuthenticated: true });
@@ -87,14 +88,14 @@ handleLogin = async () => {
         </TouchableOpacity>
 
         
-        <TouchableOpacity style={styles.loginBtn}  onPress={() => navigation.navigate('Login2')}>
-          <Text style={styles.loginText} >Login2</Text>
-        </TouchableOpacity>
+       
 
       </View>
     );
   }
 }
+
+
 
 
 

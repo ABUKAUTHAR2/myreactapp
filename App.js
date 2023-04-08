@@ -19,7 +19,7 @@ import TeamKiutso from './TeamKiutso';
 import Profile from './Profile';
 import Leaders from './Leaderslist';
 import AddLeader from './AddLeader';
-import Login2 from './Login2';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -154,11 +154,7 @@ class App extends Component {
           component={AddLeader}
           options={{ title: 'AddLeader' }}
         />
-        <Stack.Screen
-          name="Login2"
-          component={Login2}
-          options={{ title: 'Login2' }}
-        />
+        
       </>
     ) : (
       <>

@@ -1,32 +1,18 @@
-const Credentials = [
-  {
-    id: 1,
-    email: 'abukautharyvundenho@gmail.com',
-    username: 'johndoe123',
-    password: '11',
-    image: "./assets/abuu.jpg"
-  },
-  {
-    id: 2,
-    email: 'janedoe@yahoo.com',
-    username: 'janedoe456',
-    password: '098-765-4321',
-    image: "./assets/janedoe.jpg"
-  },
-  {
-    id: 3,
-    email: 'bobsmith@hotmail.com',
-    username: 'bobsmith789',
-    password: '555-555-1212',
-    image: "./assets/bobsmith.jpg"
-  },
-  {
-    id: 4,
-    email: '1',
-    username: '1',
-    password: '1',
-    image: "./assets/default.jpg"
-  }
-];
 
-export default Credentials;
+import { Alert } from 'react-native';
+
+const CREDENTIALS_URL = 'http://192.168.235.85:80/apis/login.php';
+
+async function fetchCredentials() {
+  try {
+    const response = await fetch(CREDENTIALS_URL);
+    const credentials = await response.json();
+    return credentials;
+  } catch (error) {
+    Alert.alert('Error', 'Could naot fetch credentials from server.');
+    console.error(error);
+    return [];
+  }
+}
+
+export default fetchCredentials;
