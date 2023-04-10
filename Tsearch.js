@@ -12,12 +12,24 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Footer from './Footer';
 import news from './newsData';
-
+const NEWS_API_URL = 'http://192.168.235.85:80/apis/retrivenews.php';
 class Tsearch extends Component {
   state = {
-    news: news,
+    news: [],
     searchText: '',
   };
+
+componentDidMount() {
+    fetch(NEWS_API_URL)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          news: data,
+          isLoading: false
+        });
+      })
+      .catch(error => console.error(error));
+  }
 
   handleSearchTextChange = (text) => {
     this.setState({ searchText: text });
@@ -46,7 +58,7 @@ class Tsearch extends Component {
           <TouchableOpacity
             key={newsItem.id}
             onPress={() => this.handleImagePress(newsItem)}>
-            <Image source={newsItem.image} style={styles.newsImage} />
+            <Image  source={{ uri: `data:image/png;base64,${newsItem.image}` }} style={styles.newsImage} />
           </TouchableOpacity>
         ))}
       </View>
@@ -54,7 +66,7 @@ class Tsearch extends Component {
   };
 
   render() {
-    const {navigation} = this.props;
+  //  const {navigation} = this.props;
     return (
       <View style={
         styles.container}>

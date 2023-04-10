@@ -98,7 +98,7 @@ class AddNews extends Component {
       return;
     }
   
-    fetch('http://192.168.235.85:80/apis/addnews.php', {
+    fetch('http://192.168.125.85:80/apis/addnews.php', {
   method: 'POST',
   headers: {
     Accept: 'application/json',

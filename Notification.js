@@ -11,12 +11,24 @@ import {
   
 } from 'react-native';
 import Footer from './Footer';
+const NEWS_API_URL = 'http://192.168.235.85:80/apis/retrivenews.php';
+
 class Notification extends Component {
   state = {
-    news: news,
+    news: [],
     searchText: '',
   };
-
+  componentDidMount() {
+    fetch(NEWS_API_URL)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          news: data,
+          isLoading: false
+        });
+      })
+      .catch(error => console.error(error));
+  }
   handleSearchTextChange = (text) => {
     this.setState({ searchText: text });
   };
@@ -44,7 +56,7 @@ class Notification extends Component {
           <TouchableOpacity
             key={newsItem.id}
             onPress={() => this.handleImagePress(newsItem)} style={styles.iconwithnew}>
-           <Image source={newsItem.image} style={styles.newsImage} /><Text style={styles.textt}><Text style={styles.textt1}>{newsItem.context}:</Text> <Text style={styles.textt2}>{newsItem.summary}</Text> </Text>
+           <Image source={{ uri: `data:image/png;base64,${newsItem.image}` }} style={styles.newsImage} /><Text style={styles.textt}><Text style={styles.textt1}>{newsItem.context}:</Text> <Text style={styles.textt2}>{newsItem.summary}</Text> </Text>
            <View style={styles.line} />
           </TouchableOpacity>
         ))}

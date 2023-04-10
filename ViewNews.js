@@ -1,22 +1,34 @@
 import React, { Component } from 'react';
-import { View,
+import { View,Alert,
    Text, Share, Image,  StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
-import news from './newsData';
 
+const NEWS_API_URL = 'http://192.168.125.85:80/apis/retrivenews.php';
 class ViewNews extends Component {
   state = {
     searchEnabled: false,
     menuOpen: false,
-    news: news,
+    news: [],
     searchText: '',
+    summary:'',
+    
   }
 
-
+  componentDidMount() {
+    fetch(NEWS_API_URL)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          news: data,
+          isLoading: false
+        });
+      })
+      .catch(error => console.error(error));
+  }
   onShare = async (id) => {
     const item = this.state.news.find(item => item.id === id);
     if (item) {
@@ -137,7 +149,7 @@ class ViewNews extends Component {
         <ScrollView style={styles.newsContainer}>
           {news.map(item => (
             <View key={item.id} style={styles.newsItem}>
-             <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} ><Image source={item.image} style={styles.newsImage} resizeMode="cover" /></TouchableOpacity>
+             <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} ><Image source={{ uri: `data:image;base64,${item.image}` }} style={styles.newsImage} resizeMode="cover" /></TouchableOpacity>
               <View style={styles.newsFooter}>
                 <View style={styles.newsIcons}>
                 <TouchableOpacity key={item.id} onPress={() => this.handleHearticon(item.id)}><Icon name="heart" size={20} style={styles.icon} color="red" /></TouchableOpacity>
