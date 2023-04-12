@@ -11,7 +11,7 @@ import {
   
 } from 'react-native';
 import Footer from './Footer';
-const NEWS_API_URL = 'http://192.168.235.85:80/apis/retrivenews.php';
+const NEWS_API_URL = 'http://192.168.226.85:80/apis/retrivenews.php';
 
 class Notification extends Component {
   state = {

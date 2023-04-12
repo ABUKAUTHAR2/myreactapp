@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
 
-const NEWS_API_URL = 'http://192.168.125.85:80/apis/retrivenews.php';
+const NEWS_API_URL = 'http://192.168.226.85:80/apis/retrivenews.php';
 class ViewNews extends Component {
   state = {
     searchEnabled: false,

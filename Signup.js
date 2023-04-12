@@ -107,7 +107,7 @@ class Signup extends Component {
     }
   
     // Send data to PHP script
-    fetch('http://192.168.125.85:80/apis/signup.php', {
+    fetch('http://192.168.226.85:80/apis/signup.php', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
