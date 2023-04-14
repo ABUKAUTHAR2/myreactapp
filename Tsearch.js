@@ -11,16 +11,15 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Footer from './Footer';
-import news from './newsData';
-const NEWS_API_URL = 'http://192.168.235.85:80/apis/retrivenews.php';
+
 class Tsearch extends Component {
   state = {
     news: [],
     searchText: '',
   };
 
-componentDidMount() {
-    fetch(NEWS_API_URL)
+  componentDidMount() {
+    fetch('http://192.168.165.85:80/apis/retrivenews.php')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -58,7 +57,7 @@ componentDidMount() {
           <TouchableOpacity
             key={newsItem.id}
             onPress={() => this.handleImagePress(newsItem)}>
-            <Image  source={{ uri: `data:image/png;base64,${newsItem.image}` }} style={styles.newsImage} />
+            <Image  source={{ uri: `http://192.168.165.85:80/apis/${newsItem.image_path}` }} style={styles.newsImage} />
           </TouchableOpacity>
         ))}
       </View>

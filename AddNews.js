@@ -70,58 +70,69 @@ class AddNews extends Component {
 
   handleSubmit = () => {
     const { image, context, summary, description, date } = this.state;
-  
+
     let contextError = '';
     let fileDataError = '';
     let summaryError = '';
     let descriptionError = '';
     let dateError = '';
-  
+
     if (context === '') {
       contextError = 'Please enter context';
     }
-  
+
     if (!image) {
       fileDataError = 'Please select a file';
     }
-  
+
     if (summary === '') {
       summaryError = 'Please enter summary';
     }
-  
+
     if (description === '') {
       descriptionError = 'Please enter description';
     }
-  
+
     if (contextError !== '' || fileDataError !== '' || summaryError !== '' || descriptionError !== '') {
       this.setState({ contextError, fileDataError, summaryError, descriptionError, dateError });
       return;
     }
-  
-    fetch('http://192.168.226.85:80/apis/addnews.php', {
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    image: image,
-    context: context,
-    summary: summary,
-    description: description,
-    date: date,
-  }),
-})
-  .then((response) => response.text())
-  .then((responseJson) => {
-    console.log(responseJson);
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-  
 
+    const data = new FormData();
+const imageExtension = image.split('.').pop(); // get the file extension
+const imageName = `image_${Date.now()}.${imageExtension}`; // generate a unique name
+data.append('image', {
+  uri: image,
+  type: 'image/jpeg',
+  name: imageName,
+});
+data.append('context', context);
+data.append('summary', summary);
+data.append('description', description);
+data.append('date', date);
+
+    data.append('context', context);
+    data.append('summary', summary);
+    data.append('description', description);
+    data.append('date', date);
+
+    fetch('http://192.168.165.85:80/apis/addnews.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: data,
+    })
+    alert("Another news is added to the system")
+      //.then((response) => response.text())
+      //.then((responseJson) => {
+     //   console.log(responseJson);
+      //})
+     // .catch((error) => {
+       // console.error(error);
+      //});
   };
+
         
       render() {
       const { context, fileData, summary, description, contextError, fileDataError, summaryError, descriptionError } = this.state;

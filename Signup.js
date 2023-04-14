@@ -107,7 +107,7 @@ class Signup extends Component {
     }
   
     // Send data to PHP script
-    fetch('http://192.168.226.85:80/apis/signup.php', {
+    fetch('http://192.168.165.85:80/apis/signup.php', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -124,6 +124,7 @@ class Signup extends Component {
       .then((response) => response.text())
       .then((responseJson) => {
         console.log(responseJson);
+        alert("you now registered go to log in page to see the news")
       })
       .catch((error) => {
         console.error(error);

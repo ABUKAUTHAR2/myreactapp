@@ -19,6 +19,8 @@ import TeamKiutso from './TeamKiutso';
 import Profile from './Profile';
 import Leaders from './Leaderslist';
 import AddLeader from './AddLeader';
+import AdminPanel from './Adminpanel';
+import SeeUsers from './SeeUsers';
 
 
 const Stack = createNativeStackNavigator();
@@ -100,6 +102,11 @@ class App extends Component {
                 options={{ title: 'Important' }}
               />
               <Stack.Screen
+          name="admin"
+          component={AdminPanel}
+          options={{ title: 'controll the app' }}
+        />
+              <Stack.Screen
                 name="Tsearch"
                 component={Tsearch}
                 options={{ title: 'Search News' }}
@@ -110,6 +117,11 @@ class App extends Component {
           name="Tselectednew"
           component={Tselectednew}
           options={{ title: 'Selected News' }}
+        />
+        <Stack.Screen
+          name="SeeUsers"
+          component={SeeUsers}
+          options={{ title: 'MANAGE MEMBERS OF APP' }}
         />
         <Stack.Screen
           name="Notification"

@@ -36,10 +36,10 @@ export default class Login extends Component {
         email: user.email,
         username: user.username,
       });
-    } else if (email === '00000' && password === '00000') {
+    } else if (email === '0' && password === '0') {
       const token = 'admin';
       await AsyncStorage.setItem('userToken', token);
-      this.props.navigation.navigate('AddNews');
+      this.props.navigation.navigate('admin');
     } else {
       alert('Invalid email or password');
     }

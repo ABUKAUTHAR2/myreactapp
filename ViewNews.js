@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
 
-const NEWS_API_URL = 'http://192.168.226.85:80/apis/retrivenews.php';
+const NEWS_API_URL = 'http://192.168.165.85:80/apis/retrivenews.php';
 class ViewNews extends Component {
   state = {
     searchEnabled: false,
@@ -19,7 +19,7 @@ class ViewNews extends Component {
   }
 
   componentDidMount() {
-    fetch(NEWS_API_URL)
+    fetch('http://192.168.165.85:80/apis/retrivenews.php')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -29,6 +29,7 @@ class ViewNews extends Component {
       })
       .catch(error => console.error(error));
   }
+  
   onShare = async (id) => {
     const item = this.state.news.find(item => item.id === id);
     if (item) {
@@ -75,7 +76,7 @@ class ViewNews extends Component {
     this.setState(prevState => {
       const news = prevState.news.map(item => {
         if (item.id === id) {
-          const newLikes = item.liked ? item.likes - 1 : item.likes + 1; // toggle between adding and subtracting 1
+          const newLikes = item.liked ? item.likes - 1 : parseInt(item.likes, 10) + 1; // ensure that newLikes is always an integer
           return { ...item, likes: newLikes, liked: !item.liked }; // update likes count and toggle liked state
         } else {
           return item;
@@ -83,11 +84,37 @@ class ViewNews extends Component {
       });
       return { ...prevState, news };
     });
+  
+    // Update the likes count in the database
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('liked', this.state.news.find(item => item.id === id).liked ? 0 : 1);
+    fetch('http://192.168.165.85:80/apis/hearticon.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        console.log('Likes updated successfully');
+      } else {
+        console.log('Error updating likes:', data.message);
+      }
+    })
+    .catch(error => {
+      console.log('Error updating likes:', error);
+    });
   }
+  
+  
+  
+  
+  
   handleImageDoubleClick = (id) => {
     this.setState(prevState => {
       const news = prevState.news.map(item => {
         if (item.id === id) {
+          
           const likes = prevState[item.id]?.likes ?? 0; // check if likes exists in state, default to 0 if not
           return { ...item, likes: likes + 1 }; // increment likes count by 1
         } else {
@@ -149,7 +176,14 @@ class ViewNews extends Component {
         <ScrollView style={styles.newsContainer}>
           {news.map(item => (
             <View key={item.id} style={styles.newsItem}>
-             <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} ><Image source={{ uri: `data:image;base64,${item.image}` }} style={styles.newsImage} resizeMode="cover" /></TouchableOpacity>
+             <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} >
+              <Image
+  source={{ uri: `http://192.168.165.85:80/apis/${item.image_path}` }}
+  style={styles.newsImage}
+  resizeMode="cover"
+/>
+
+</TouchableOpacity>
               <View style={styles.newsFooter}>
                 <View style={styles.newsIcons}>
                 <TouchableOpacity key={item.id} onPress={() => this.handleHearticon(item.id)}><Icon name="heart" size={20} style={styles.icon} color="red" /></TouchableOpacity>
@@ -211,7 +245,7 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-          Importantr
+          Important
         </Text>
       </View>
     </TouchableOpacity>
