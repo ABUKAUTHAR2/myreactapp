@@ -404,11 +404,11 @@ width: 50,
 paddingLeft:1
 },
 
-headerRight: {
-  width: 90,
-  marginRight:9
+//headerRight: {
+ // width: 190,
+  //marginRight:99
  
-  },
+//  },
 headerMiddle: {
 alignItems: 'center',
 justifyContent: 'center',

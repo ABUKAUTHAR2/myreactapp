@@ -9,7 +9,7 @@ async function fetchCredentials() {
     const credentials = await response.json();
     return credentials;
   } catch (error) {
-    Alert.alert('Error', 'Could naot fetch credentials from server.');
+    Alert.alert('Error', 'Make sure you switch on you data to access  kiutsoapp service.');
     console.error(error);
     return [];
   }
