@@ -109,12 +109,11 @@ data.append('image', {
 data.append('context', context);
 data.append('summary', summary);
 data.append('description', description);
-data.append('date', date);
 
     data.append('context', context);
     data.append('summary', summary);
     data.append('description', description);
-    data.append('date', date);
+    
 
     fetch('http://192.168.165.85:80/apis/addnews.php', {
       method: 'POST',

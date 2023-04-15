@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Dimensions, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import news from './newsData';
+
 
 class Footer extends Component {
-  state = {
-    news: news,
-  };
+  
 
   render() {
     const { userData } = this.props;

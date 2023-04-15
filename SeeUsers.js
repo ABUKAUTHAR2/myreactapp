@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
 const API_URL = 'http://192.168.165.85:80/apis/get_users.php';
@@ -53,7 +52,6 @@ class SeeUsers extends Component {
     if (json.status === 'success') {
       this.setState({ editing: null });
       this.fetchUsers();
-      
     }
   };
 
@@ -64,7 +62,6 @@ class SeeUsers extends Component {
     const { first_name, last_name, email, phone ,password,} = isEditing ? editData : item;
   
     return (
-      <ScrollView>
       <View style={styles.item}>
         <View style={styles.info}>
           {isEditing ? (
@@ -134,15 +131,12 @@ class SeeUsers extends Component {
             </>
           ) : (
             <>
-          
-            <Text style={styles.name}>NAME: 
+              <Text style={styles.name}>NAME: 
                 {first_name} {last_name}
               </Text>
               <Text style={styles.email}>EMAIL: {email}</Text>
               <Text style={styles.phone}>PHONE NUMBERS: {phone}</Text>
               <Text style={styles.phone}>PASSWORD: {password}</Text>
-            
-              
 
             </>
           )}
@@ -170,7 +164,6 @@ class SeeUsers extends Component {
           )}
         </View>
       </View>
-      </ScrollView>
     );
   };
 

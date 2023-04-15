@@ -21,6 +21,8 @@ import Leaders from './Leaderslist';
 import AddLeader from './AddLeader';
 import AdminPanel from './Adminpanel';
 import SeeUsers from './SeeUsers';
+import NewsManager from './NewsManager';
+import Delete_leaders from'./Delete_leaders'
 
 
 const Stack = createNativeStackNavigator();
@@ -124,6 +126,11 @@ class App extends Component {
           options={{ title: 'MANAGE MEMBERS OF APP' }}
         />
         <Stack.Screen
+          name="NewsManger"
+          component={NewsManager}
+          options={{ title: 'MANAGE all news in  OF APP' }}
+        />
+        <Stack.Screen
           name="Notification"
           component={Notification}
           options={{ title: 'Notifications' }}
@@ -165,6 +172,12 @@ class App extends Component {
           name="AddLeader"
           component={AddLeader}
           options={{ title: 'AddLeader' }}
+        />
+
+<Stack.Screen
+          name="Delete_leaders"
+          component={Delete_leaders}
+          options={{ title: 'Delete suspended leader' }}
         />
         
       </>

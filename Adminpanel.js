@@ -10,17 +10,21 @@ class AdminPanel extends Component {
           <Text style={styles.title}>App Admin Panel</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Login')}>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('NewsManger')}>
             <Text style={styles.buttonText}>Manage News</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('AddNews')}>
+            <Text style={styles.buttonText}>Add News</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('SeeUsers')}>
             <Text style={styles.buttonText}>Manage Users</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Login')}>
-            <Text style={styles.buttonText}>Manage Leaders</Text>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('AddLeader')}>
+            <Text style={styles.buttonText}>Add Leaders</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('AddNews')}>
-            <Text style={styles.buttonText}>Add News</Text>
+         
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Delete_leaders')}>
+            <Text style={styles.buttonText}>Delete leader</Text>
           </TouchableOpacity>
         </View>
       </View>

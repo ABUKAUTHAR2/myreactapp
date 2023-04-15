@@ -1,124 +1,164 @@
-import React, { useState } from "react";
-import { View, Text, Image, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { Kiutsodata } from "./Kiutsodata";
+import React, { Component } from 'react';
+import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 
-const TeamKiutso = () => {
-  const [selectedArray, setSelectedArray] = useState("array1");
+class Leaderlist extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      leaders: [],
+      intakeYears: [],
+      selectedIntakeYear: null,
+    };
+  }
 
-  const handleArrayChange = (value) => {
-    setSelectedArray(value);
-  };
+  componentDidMount() {
+    fetch('http://192.168.165.85:80/apis/get_leaders.php')
+      .then(response => response.json())
+      .then(data => {
+        const intakeYears = Array.from(new Set(data.map(leader => leader.intake_year)));
+        this.setState({ leaders: data, intakeYears, selectedIntakeYear: intakeYears[0] });
+      })
+      .catch(error => console.log(error));
+  }
 
-  const arrayToDisplay = Kiutsodata[selectedArray];
+  handleIntakeYearPress = intakeYear => {
+    this.setState({ selectedIntakeYear: intakeYear });
+  }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>KIUTSO LEADERS</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, selectedArray === "array1" && styles.selectedButton]} onPress={() => handleArrayChange("array1")}>
-          <Text style={[styles.buttonText, selectedArray === "array1" && styles.selectedButtonText]}>2022/2023</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, selectedArray === "array2" && styles.selectedButton]} onPress={() => handleArrayChange("array2")}>
-          <Text style={[styles.buttonText, selectedArray === "array2" && styles.selectedButtonText]}>2021/2022</Text>
-        </TouchableOpacity>
+  handleLeaderPress = leader => {
+    const updatedLeaders = this.state.leaders.map(l => {
+      if (l.id === leader.id) {
+        return { ...l, showBiography: !l.showBiography };
+      } else {
+        return l;
+      }
+    });
+    this.setState({ leaders: updatedLeaders });
+  }
+
+  render() {
+    const { leaders, intakeYears, selectedIntakeYear } = this.state;
+    const selectedLeaders = leaders.filter(leader => leader.intake_year === selectedIntakeYear);
+    
+    return (
+      <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          {intakeYears.map(intakeYear => (
+            <TouchableOpacity
+              key={intakeYear}
+              onPress={() => this.handleIntakeYearPress(intakeYear)}
+              style={[styles.arrayButton, selectedIntakeYear === intakeYear && styles.selectedArrayButton]}
+            >
+              <Text style={[styles.arrayButtonText, selectedIntakeYear === intakeYear && styles.selectedArrayButtonText]}>
+                {intakeYear}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <ScrollView>
+          {selectedLeaders.map(leader => (
+            <TouchableOpacity
+              key={leader.id}
+              style={styles.leaderCard}
+              onPress={() => this.handleLeaderPress(leader)}
+            >
+              <Image
+                source={{ uri: `http://192.168.165.85:80/apis/${leader.image}` }}
+                style={styles.leaderImage}
+              />
+              <Text style={styles.leaderName}>{leader.name}</Text>
+              <Text style={styles.leaderPosition}>{leader.position}</Text>
+              <Text style={styles.leaderContact}>{leader.phone} - {leader.email}</Text>
+              {leader.showBiography && <Text style={styles.leaderBiography}>{leader.biography}</Text>}
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
-      <ScrollView style={styles.cardContainer}>
-        {arrayToDisplay.map((item) => (
-          <View key={item.phone} style={styles.card}>
-            <Image source={item.image} style={styles.image} />
-            <Text style={styles.name}>{item.name}</Text>
-            <Text style={styles.position}>{item.position}</Text>
-            <Text style={styles.phone}>{item.phone}</Text>
-          </View>
-        ))}
-      </ScrollView>
-    </View>
-  );
-};
+    );
+  }
+}
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#f8f8f8",
-    height: "100%",
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 20,
+    alignItems: 'center',
   },
   buttonContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
-  },
-  button: {
-    flex: 1,
-    margin: 10,
+
+
     padding: 10,
-    borderRadius: 10,
-    backgroundColor: "#ccc",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#999',
+    backgroundColor: '#eee'
   },
-  selectedButton: {
-    backgroundColor: "#4CAF50",
+  arrayButton: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#999',
+    backgroundColor: '#eee',
+
   },
-  buttonText: {
-    fontSize: 20,
-    textAlign: "center",
+  selectedArrayButton: {
+    backgroundColor: '#4CAF50',
+    borderColor: '#4CAF50',
   },
-  selectedButtonText: {
-    color: "white",
+  arrayButtonText: {
+    fontWeight: 'bold',
+    color: '#999',
   },
-  cardContainer: {
-    flex: 1,
-    width: "100%",
+  selectedArrayButtonText: {
+    color: '#fff',
   },
-  card: {
-    flexDirection: "column",
-    alignItems: "center",
-    margin: 20,
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    shadowColor: "#000",
+  leaderCard: {
+    flexDirection: 'column',padding: 10,
+    marginBottom: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    shadowColor: '#000',
     shadowOffset: {
-      width: 0,
-      height: 2,
+    width: 0,
+    height: 2,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 2,
-    width: "90%",
-  },
-  image: {
-    width: "100%",
-    height: undefined,
-    aspectRatio: 1,
-    resizeMode: "contain",
-  },
-  
-  
-
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    alignItems: 'center',
+    },
+    leaderImage: {
+    width: 300,
+    height: 300,
+    borderRadius: 50,
     marginBottom: 10,
-    textAlign: "center",
-  },
-  position: {
+    },
+    leaderName: {
+    fontWeight: 'bold',
     fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "center",
-    color:"#4CAF50",
-  },
-  phone: {
-    fontSize: 16,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-});
-
-export default TeamKiutso;
+    marginBottom: 5,
+    },
+    leaderPosition: {
+    fontStyle: 'italic',
+    marginBottom: 5,
+    fontSize: 15,
+    color: '#4CAF50',
+    },
+    leaderContact: {
+    marginBottom: 5,
+    },
+    leaderBiography: {
+    marginTop: 10,
+    textAlign: 'center',
+    },
+    };
+    
+    export default Leaderlist;
+    
+    
+    
+    
+    
+   

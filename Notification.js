@@ -1,6 +1,6 @@
 //this is reall
 import React, { Component } from 'react';
-import news from './newsData';
+
 import {
   View,
   Text,
