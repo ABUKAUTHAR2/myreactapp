@@ -57,7 +57,7 @@ export default class Login extends Component {
           source={require('./assets/kiutsologo.png')}
           style={styles.logoimage}
         />
-        <Text style={styles.logo}>KIUTSO NEWS APP</Text>
+        <Text style={styles.logo}>KIUTSO NEWS</Text>
         
         <View style={styles.inputView}>
           <TextInput

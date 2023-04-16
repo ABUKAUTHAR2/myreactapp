@@ -115,7 +115,7 @@ data.append('description', description);
     data.append('description', description);
     
 
-    fetch('http://192.168.165.85:80/apis/addnews.php', {
+    fetch('http://192.168.174.85:80/apis/addnews.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',

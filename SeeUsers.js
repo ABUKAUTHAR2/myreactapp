@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
-const API_URL = 'http://192.168.165.85:80/apis/get_users.php';
+const API_URL = 'http://192.168.174.85:80/apis/get_users.php';
 
 class SeeUsers extends Component {
   state = {
@@ -29,7 +29,7 @@ class SeeUsers extends Component {
   };
 
   handleDelete = async (id) => {
-    const response = await fetch(`http://192.168.165.85:80/apis/delete_user.php?id=${id}`);
+    const response = await fetch(`http://192.168.174.85:80/apis/delete_user.php?id=${id}`);
     const json = await response.json();
     if (json.status === 'success') {
       this.fetchUsers();
@@ -41,7 +41,7 @@ class SeeUsers extends Component {
   };
 
   handleSave = async (id, data) => {
-    const response = await fetch(`http://192.168.165.85:80/apis/update_user.php?id=${id}`, {
+    const response = await fetch(`http://192.168.174.85:80/apis/update_user.php?id=${id}`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
