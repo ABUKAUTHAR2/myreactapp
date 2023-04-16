@@ -47,11 +47,12 @@ class Important extends Component {
         item.summary.match(regex) ||
         item.context.match(regex) ||
         item.description.match(regex)
-      ) && item.important;
+      ) && item.important==1;
     }).sort((a, b) => b.id - a.id);
     if (filteredNews.length === 0) {
       return <Text style={styles.noResultsText}>No results found</Text>;
     }
+    
     return (
       <View style={styles.newsImageContainer}>
         {filteredNews.map((newsItem) => (
@@ -64,10 +65,11 @@ class Important extends Component {
         ))}
       </View>
     );
-  };
+
+};
 
   render() {
-    const {navigation} = this.props;
+    
     return (
       <View style={
         styles.container}>

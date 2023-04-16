@@ -171,10 +171,11 @@ class ViewNews extends Component {
             onChangeText={this.handleSearchTextChange}
           />
         </View>
-      )}
+      ) }
 
         <ScrollView style={styles.newsContainer}>
-          {news.map(item => (
+        {news.sort((a, b) => b.id - a.id).map(item => (
+          
             <View key={item.id} style={styles.newsItem}>
              <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} >
               <Image
@@ -389,8 +390,7 @@ const styles = StyleSheet.create({
 container: {
 flex: 1,
 backgroundColor: '#fff'
-},
-header: {
+},header: {
   flexDirection: 'row',
   alignItems: 'center',
   paddingHorizontal: 20,
@@ -410,16 +410,19 @@ headerRight: {
 },
 headerMiddle: {
   flex: 1,
-  alignItems: 'center',
- // justifyContent: 'center',
   
+  marginLeft: '25%',
+ 
+  justifyContent: 'center',
 },
 logo: {
-width: 70,
-height: 70,
-borderRadius: 50,
-paddingTop:70
+  width: 70,
+  height: 70,
+  borderRadius: 50,
+  paddingTop: 40,
+  marginTop:'15%'
 },
+
 searchContainer: {
   flexDirection: 'row',
   alignItems: 'center',

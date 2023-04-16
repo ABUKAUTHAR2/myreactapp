@@ -41,7 +41,9 @@ class Leaderlist extends Component {
     const selectedLeaders = leaders.filter(leader => leader.intake_year === selectedIntakeYear);
     
     return (
+      
       <View style={styles.container}>
+         <View style={{ height: 10 }} />
         <View style={styles.buttonContainer}>
           {intakeYears.map(intakeYear => (
             <TouchableOpacity
@@ -56,7 +58,10 @@ class Leaderlist extends Component {
           ))}
         </View>
         <ScrollView>
+        <Text   style={styles.leaderPosition}>CLICK IMAGE TO SEE BIOGRAPH</Text>
+        <View style={{ height: 10 }} />
           {selectedLeaders.map(leader => (
+           
             <TouchableOpacity
               key={leader.id}
               style={styles.leaderCard}
@@ -106,13 +111,16 @@ const styles = {
   selectedArrayButton: {
     backgroundColor: '#4CAF50',
     borderColor: '#4CAF50',
+    padding: 10,
   },
   arrayButtonText: {
     fontWeight: 'bold',
     color: '#999',
+    
   },
   selectedArrayButtonText: {
     color: '#fff',
+    
   },
   leaderCard: {
     flexDirection: 'column',padding: 10,
@@ -132,7 +140,7 @@ const styles = {
     leaderImage: {
     width: 300,
     height: 300,
-    borderRadius: 50,
+    borderRadius: 30,
     marginBottom: 10,
     },
     leaderName: {

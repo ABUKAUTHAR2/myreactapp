@@ -5,15 +5,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 class Profile extends Component {
   state = {
-    username: '',
+    first_name: '',
+    phone:'',
     email: '',
     images: [], // array of user's images
   };
 
   componentDidMount = async () => {
     const userData = await AsyncStorage.getItem('userData');
-    const { email, username } = JSON.parse(userData);
-    this.setState({ email, username });
+    const { email, first_name,phone } = JSON.parse(userData);
+    this.setState({ email, first_name,phone });
   };
 
   // function to handle logout button press
@@ -39,15 +40,11 @@ class Profile extends Component {
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <View style={styles.profileImageContainer}>
-            <Image
-              style={styles.profileImage}
-              source={{ uri: 'https://randomuser.me/api/portraits/women/17.jpg' }}
-            />
-            <TouchableOpacity style={styles.editIconContainer}>
-              <Icon name="edit" size={20} color="#FFFFFF" />
-            </TouchableOpacity>
+          <Icon name="user" size={135}  style={styles.profileImage} color="black" />
+            
+            
           </View>
-          <Text style={styles.username}>{this.state.username}</Text>
+          <Text style={styles.username}>{this.state.first_name}</Text>
           <Text style={styles.email}>{this.state.email}</Text>
         </View>
         <View style={styles.content}>
@@ -55,13 +52,17 @@ class Profile extends Component {
             <Text style={styles.sectionTitle}>Personal Information</Text>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Full Name</Text>
-              <Text style={styles.infoValue}>{this.state.username}</Text>
+              <Text style={styles.infoValue}>{this.state.first_name}</Text>
             </View>
             
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Email</Text>
               <Text style={styles.infoValue}>{this.state.email}</Text>
             </View>
+            <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>PHONE</Text>
+              <Text style={styles.infoValue}>{this.state.phone}</Text>
+              </View>
             <TouchableOpacity style={styles.editButton}>
               <Text style={styles.editButtonText}>Edit</Text>
             </TouchableOpacity>

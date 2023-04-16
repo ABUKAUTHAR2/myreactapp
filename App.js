@@ -23,6 +23,7 @@ import AdminPanel from './Adminpanel';
 import SeeUsers from './SeeUsers';
 import NewsManager from './NewsManager';
 import Delete_leaders from'./Delete_leaders'
+import Comments from './Comments';
 
 
 const Stack = createNativeStackNavigator();
@@ -172,6 +173,12 @@ class App extends Component {
           name="AddLeader"
           component={AddLeader}
           options={{ title: 'AddLeader' }}
+        />
+
+<Stack.Screen
+          name="Comments"
+          component={Comments}
+          options={{ title: 'comments' }}
         />
 
 <Stack.Screen

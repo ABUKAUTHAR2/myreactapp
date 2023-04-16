@@ -25,7 +25,8 @@ export default class Login extends Component {
     if (user) {
       const userData = JSON.stringify({
         email: user.email,
-        username: user.username,
+        first_name: user.first_name,
+        phone:user.phone,
         Image:user.image,
       });
       await AsyncStorage.setItem('userData', userData);
@@ -34,7 +35,8 @@ export default class Login extends Component {
       this.props.navigation.navigate('ViewNews', {
         isAuthenticated: true,
         email: user.email,
-        username: user.username,
+        first_name: user.first_name,
+        phone:user.phone,
       });
     } else if (email === '0' && password === '0') {
       const token = 'admin';
