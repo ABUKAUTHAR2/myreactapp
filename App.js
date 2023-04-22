@@ -190,7 +190,7 @@ class App extends Component {
     title: 'Profile',
     
   }}
-  initialParams={{ username: this.state.username,phone:this.state.phone, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
+  //initialParams={{ username: this.state.username,phone:this.state.phone, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
 />
 
 <Stack.Screen
