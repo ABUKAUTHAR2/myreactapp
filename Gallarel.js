@@ -1,38 +1,28 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Image } from 'react-native';
-
 import * as ImagePicker from 'expo-image-picker';
-
-class AddNews extends Component {
+class Gallery extends Component {
   state = {
-    context: '',
+    caption: '',
     fileData: null,
-    summary: '',
-    description: '',
     date: new Date(),
-    contextError: '',
+    captionError: '',
     fileDataError: '',
-    summaryError: '',
-    descriptionError: '',
-    dateError: '',
     image: null,
   };
-
-  handleContextChange = (context) => {
-    if (context.length <= 30) {
-      this.setState({ context, contextError: '' });
+  handlecaptionChange = (caption) => {
+    if (caption.length <= 30) {
+      this.setState({ caption, captionError: '' });
     } else {
-      this.setState({ contextError: 'Context should be less than 30 characters' });
+      this.setState({ captionError: 'caption should be less than 30 characters' });
     }
   };
-
   handleFileDataChange = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('Sorry, we need camera roll permissions to make this work!');
       return;
-    }
-  
+    }  
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
@@ -50,8 +40,6 @@ class AddNews extends Component {
       this.setState({ fileData: null, fileDataError: 'Please select a file' });
     }
   };
-  
-
   handleSummaryChange = (summary) => {
     if (summary.length <= 50) {
       this.setState({ summary, summaryError: '' });
@@ -69,32 +57,24 @@ class AddNews extends Component {
   };
 
   handleSubmit = () => {
-    const { image, context, summary, description, date } = this.state;
+    const { image, caption, date } = this.state;
 
-    let contextError = '';
+    let captionError = '';
     let fileDataError = '';
-    let summaryError = '';
-    let descriptionError = '';
-    let dateError = '';
+   
 
-    if (context === '') {
-      contextError = 'Please enter context';
+    if (caption === '') {
+      captionError = 'Please enter caption';
     }
 
     if (!image) {
       fileDataError = 'Please select a file';
     }
 
-    if (summary === '') {
-      summaryError = 'Please enter summary';
-    }
+   
 
-    if (description === '') {
-      descriptionError = 'Please enter description';
-    }
-
-    if (contextError !== '' || fileDataError !== '' || summaryError !== '' || descriptionError !== '') {
-      this.setState({ contextError, fileDataError, summaryError, descriptionError, dateError });
+    if (captionError !== '' || fileDataError !== '' ) {
+      this.setState({ captionError, fileDataError,});
       return;
     }
 
@@ -106,23 +86,18 @@ data.append('image', {
   type: 'image/jpeg',
   name: imageName,
 });
-data.append('context', context);
-data.append('summary', summary);
-data.append('description', description);
+data.append('caption', caption);
 
-    data.append('context', context);
-    data.append('summary', summary);
-    data.append('description', description);
     
 
-    fetch('http://192.168.255.85:80/apis/addnews.php', {
+    fetch('http://192.168.255.85:80/apis/gallarey.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
       body: data,
     })
-    alert("Another news is added to the system")
+    alert("Another picture is added to the system")
       //.then((response) => response.text())
       //.then((responseJson) => {
      //   console.log(responseJson);
@@ -134,24 +109,24 @@ data.append('description', description);
 
         
       render() {
-      const { context, fileData, summary, description, contextError, fileDataError, summaryError, descriptionError } = this.state;
+      const { caption, fileData,  captionError, navigation, fileDataError,  } = this.state;
       
       return (
         <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
           <View style={styles.form}>
-            <Text style={styles.heading}>ADD NEWS TO THE APP DATABASE </Text>
-            <Text style={styles.label}>Context:</Text>
+           <Text>SHOW KIUT COMMUNITY SOMETHING BY POSTING HERE</Text>
+            <Text style={styles.label}>caption:</Text>
             <TextInput
-              value={context}
-              onChangeText={this.handleContextChange}
-              placeholder="Enter context"
+              value={caption}
+              onChangeText={this.handlecaptionChange}
+              placeholder="Enter caption"
               style={styles.input}
             />
-            {contextError !== '' && <Text style={styles.error}>{contextError}</Text>}
+            {captionError !== '' && <Text style={styles.error}>{captionError}</Text>}
       
-            <Text style={styles.label}>File:</Text>
+            <Text style={styles.label}>image:</Text>
             <TouchableOpacity onPress={this.handleFileDataChange} style={styles.input}>
-              <Text>Select a file</Text>
+              <Text>Select a images only</Text>
             </TouchableOpacity>
             {fileDataError !== '' && <Text style={styles.error}>{fileDataError}</Text>}
       
@@ -161,28 +136,14 @@ data.append('description', description);
               </View>
             )}
       
-            <Text style={styles.label}>Summary:</Text>
-            <TextInput
-              value={summary}
-              onChangeText={this.handleSummaryChange}
-              placeholder="Enter summary"
-              style={styles.input}
-            />
-            {summaryError !== '' && <Text style={styles.error}>{summaryError}</Text>}
-      
-            <Text style={styles.label}>Description:</Text>
-            <TextInput
-              value={description}
-              onChangeText={this.handleDescriptionChange}
-              placeholder="Enter description"
-              style={styles.input}
-              multiline
-              numberOfLines={5}
-            />
-            {descriptionError !== '' && <Text style={styles.error}>{descriptionError}</Text>}
+           
+            
       
             <TouchableOpacity onPress={this.handleSubmit} style={styles.button}>
-              <Text style={styles.buttonText}>Submit</Text>
+              <Text style={styles.buttonText}>POST TO KIUT COMUNITY</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Gallarey2')} style={styles.button}>
+              <Text style={styles.buttonText}>STATUSES</Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -193,7 +154,7 @@ data.append('description', description);
   const styles = StyleSheet.create({
   container: {
   flex: 1,
-  justifyContent: 'center',
+  //justifyContent: 'center',
   alignItems: 'center',
   },
   heading:{
@@ -247,7 +208,7 @@ data.append('description', description);
   },
   });
   
-  export default AddNews;
+  export default Gallery;
   
   
   

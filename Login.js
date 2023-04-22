@@ -10,6 +10,7 @@ export default class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      phone:'',
       credentials: [],
     };
   }
@@ -17,8 +18,23 @@ export default class Login extends Component {
   async componentDidMount() {
     const credentials = await Credentials();
     this.setState({ credentials });
+    const userToken = await AsyncStorage.getItem('userToken');
+    const userData = await AsyncStorage.getItem('userData');
+    if (userToken && userData) {
+      const parsedUserData = JSON.parse(userData);
+      if (userToken === 'loggedIn') {
+        this.props.navigation.navigate('ViewNews', {
+          isAuthenticated: true,
+          email: parsedUserData.email,
+          first_name: parsedUserData.first_name,
+          phone: parsedUserData.phone,
+        });
+      } else if (userToken === 'admin') {
+        this.props.navigation.navigate('admin');
+      }
+    }
   }
-
+  
   handleLogin = async () => {
     const { email, password, credentials } = this.state;
     const user = credentials.find((u) => u.email === email && u.password === password);
@@ -26,8 +42,8 @@ export default class Login extends Component {
       const userData = JSON.stringify({
         email: user.email,
         first_name: user.first_name,
-        phone:user.phone,
-        Image:user.image,
+        phone: user.phone,
+        Image: user.image,
       });
       await AsyncStorage.setItem('userData', userData);
       const token = 'loggedIn';
@@ -36,7 +52,7 @@ export default class Login extends Component {
         isAuthenticated: true,
         email: user.email,
         first_name: user.first_name,
-        phone:user.phone,
+        phone: user.phone,
       });
     } else if (email === '0' && password === '0') {
       const token = 'admin';
@@ -46,13 +62,14 @@ export default class Login extends Component {
       alert('Invalid email or password');
     }
   };
-  
+    
   setAuthentication = () => {
     this.props.navigation.setParams({ isAuthenticated: true });
   }
   
   render() {
     const { navigation } = this.props;
+    
     return (
       <View style={styles.container}>
         <Image
@@ -79,15 +96,13 @@ export default class Login extends Component {
           />
         </View>
         <TouchableOpacity style={styles.loginBtn}  onPress={this.handleLogin}>
-          <Text style={styles.loginText} >LOGIN</Text>
+          <Text style={styles.loginText} >LOGIiN</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
           <Text style={styles.signupText}>Don't have an account? Signup</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.loginBtn}  onPress={() => navigation.navigate('ViewNews')}>
-          <Text style={styles.loginText} >DELETE</Text>
-        </TouchableOpacity>
+       
 
         
        

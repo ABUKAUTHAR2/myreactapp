@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { Button } from 'react-native';
 
 import Signup from './Signup';
@@ -23,7 +24,12 @@ import AdminPanel from './Adminpanel';
 import SeeUsers from './SeeUsers';
 import NewsManager from './NewsManager';
 import Delete_leaders from'./Delete_leaders'
-import Comments from './Comments';
+import Comment from './Comments';
+import DeveloperDetails from './DeveloperDetails';
+import Gallery from './Gallarel';
+import Gallarey2 from './gallarey2';
+import FeedbackList from './feedbacks';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -70,13 +76,18 @@ class App extends Component {
       console.log(error);
     }
   }
-
+  logout = async () => {
+    await AsyncStorage.removeItem('userData');
+    await AsyncStorage.removeItem('userToken');
+    this.props.navigation.setParams({ isAuthenticated: false });
+    this.props.navigation.navigate('Login');
+  };
+  
   render() {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          {!this.state.isAuthenticated ? (
-            <>
+          
               <Stack.Screen
                 name="Login"
                 component={Login}
@@ -137,9 +148,25 @@ class App extends Component {
           options={{ title: 'Notifications' }}
         />
         <Stack.Screen
+          name="FeedbackList"
+          component={FeedbackList}
+          options={{ title: 'see  feedback from users' }}
+        />
+        <Stack.Screen
           name="Helpandfeedback"
           component={Helpandfeedback}
           options={{ title: 'Help & Feedback' }}
+        />
+        <Stack.Screen
+          name="Gallery"
+          component={Gallery}
+          options={{ title: 'Gallery' }}
+        />
+        
+        <Stack.Screen
+          name="Gallarey2"
+          component={Gallarey2}
+          options={{ title: 'view status' }}
         />
         <Stack.Screen
           name="Settings"
@@ -152,15 +179,18 @@ class App extends Component {
           options={{ title: 'Team Kiutso' }}
         />
         <Stack.Screen
+          name="CommentSection"
+          component={Comment}
+          options={{ title: 'CommentSection' }}
+        />
+        <Stack.Screen
   name="Profile"
   component={Profile}
   options={{
     title: 'Profile',
-    headerRight: () => (
-      <Button title="Logout" onPress={() => this.clearAuthentication()} />
-    ),
+    
   }}
-  initialParams={{ username: this.state.username, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
+  initialParams={{ username: this.state.username,phone:this.state.phone, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
 />
 
 <Stack.Screen
@@ -175,24 +205,19 @@ class App extends Component {
           options={{ title: 'AddLeader' }}
         />
 
-<Stack.Screen
-          name="Comments"
-          component={Comments}
-          options={{ title: 'comments' }}
-        />
+
 
 <Stack.Screen
           name="Delete_leaders"
           component={Delete_leaders}
           options={{ title: 'Delete suspended leader' }}
         />
-        
-      </>
-    ) : (
-      <>
-       
-      </>
-    )}
+        <Stack.Screen
+          name="DeveloperDetails"
+          component={DeveloperDetails}
+          options={{ title: 'Developer Details' }}
+        />
+    
   </Stack.Navigator>
 </NavigationContainer>
 

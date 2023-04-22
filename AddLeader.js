@@ -144,7 +144,7 @@ data.append('name', name);
   
     
 
-    fetch('http://192.168.174.85:80/apis/add_leader.php', {
+    fetch('http://192.168.255.85:80/apis/add_leader.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',

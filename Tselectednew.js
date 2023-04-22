@@ -11,7 +11,7 @@ class Tselectednew extends Component {
       
         <ScrollView>
              <View style={styles.container}>
-        <Image source={{ uri: `http://192.168.174.85:80/apis/${item.image_path}` }} style={styles.newsImage} />
+        <Image source={{ uri: `http://192.168.255.85:80/apis/${item.image_path}` }} style={styles.newsImage} />
         <View style={styles.newsDetails}>
           <Text style={styles.context}>{item.context}</Text>
           <Text style={styles.summary}>{item.summary}</Text>

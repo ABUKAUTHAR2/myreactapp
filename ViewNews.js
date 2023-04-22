@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { View,Alert,
    Text, Share, Image,  StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
 
-const NEWS_API_URL = 'http://192.168.174.85:80/apis/retrivenews.php';
+const NEWS_API_URL = 'http://192.168.255.85:80/apis/retrivenews.php';
 class ViewNews extends Component {
   state = {
     searchEnabled: false,
@@ -19,7 +20,7 @@ class ViewNews extends Component {
   }
 
   componentDidMount() {
-    fetch('http://192.168.174.85:80/apis/retrivenews.php')
+    fetch('http://192.168.255.85:80/apis/retrivenews.php')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -72,7 +73,9 @@ class ViewNews extends Component {
     const regex = new RegExp(searchText, 'i');
     return news.filter((item) => regex.test(item.summary));
   };
-  handleHearticon = (id) => {
+
+
+  handleHearticon = async (id) => {
     this.setState(prevState => {
       const news = prevState.news.map(item => {
         if (item.id === id) {
@@ -89,14 +92,19 @@ class ViewNews extends Component {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('liked', this.state.news.find(item => item.id === id).liked ? 0 : 1);
-    fetch('http://192.168.174.85:80/apis/hearticon.php', {
+    fetch('http://192.168.255.85:80/apis/hearticon.php', {
       method: 'POST',
       body: formData
     })
     .then(response => response.json())
-    .then(data => {
+    .then(async data => {
       if (data.status === 'success') {
         console.log('Likes updated successfully');
+  
+        // Store the updated like state in AsyncStorage
+        const likes = JSON.parse(await AsyncStorage.getItem('likes')) || {};
+        likes[id] = this.state.news.find(item => item.id === id).liked;
+        await AsyncStorage.setItem('likes', JSON.stringify(likes));
       } else {
         console.log('Error updating likes:', data.message);
       }
@@ -105,6 +113,7 @@ class ViewNews extends Component {
       console.log('Error updating likes:', error);
     });
   }
+  
   
   
   
@@ -179,7 +188,7 @@ class ViewNews extends Component {
             <View key={item.id} style={styles.newsItem}>
              <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} >
               <Image
-  source={{ uri: `http://192.168.174.85:80/apis/${item.image_path}` }}
+  source={{ uri: `http://192.168.255.85:80/apis/${item.image_path}` }}
   style={styles.newsImage}
   resizeMode="cover"
 />
@@ -194,7 +203,10 @@ class ViewNews extends Component {
                  <TouchableOpacity key={item.id} onPress={() => this.onShare(item.id)} ><Icon name="share-alt" size={20} style={styles.icon} color="black" /></TouchableOpacity> 
                 </View>
                 <View style={styles.newsIcons}>
-                 <TouchableOpacity onPress={() =>this.props.navigation.navigate('Importantrr')}><Icon name="star" size={20} style={styles.icon} color="#4CAF50" /></TouchableOpacity>  
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('CommentSection', {news_id: item.id})}>
+  <Icon name="comment" size={20} style={styles.icon} color="#4CAF50" />
+</TouchableOpacity>
+  
               </View>
               </View>
               <Text style={styles.newsContext}>{item.context}</Text>
@@ -216,7 +228,7 @@ class ViewNews extends Component {
 {menuOpen && (
           <View style={[styles.popup, { width: popupWidth }]}>
             <TouchableOpacity onPress={this.toggleMenu} style={styles.cancelButton}>
-              <MaterialIcons name="close" size={32} color="rgb(129, 5, 5)" />
+              <MaterialIcons name="close" size={35} color="rgb(129, 5, 5)" />
             </TouchableOpacity>
             <Image
               source={require('./assets/kiutsologo.png')}
@@ -359,6 +371,32 @@ class ViewNews extends Component {
         padding: 10,
        
       }}
+      onPress={() =>this.props.navigation.navigate('Gallery')}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="picture-o" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+         Gallery
+        </Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+      onPress={() =>this.props.navigation.navigate('DeveloperDetails')}
     >
       <View
         style={{
@@ -380,6 +418,8 @@ class ViewNews extends Component {
            
               </View>
           </View>
+          
+
         )}
 </View>
 );

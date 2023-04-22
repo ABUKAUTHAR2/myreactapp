@@ -26,6 +26,9 @@ class AdminPanel extends Component {
           <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Delete_leaders')}>
             <Text style={styles.buttonText}>Delete leader</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('FeedbackList')}>
+            <Text style={styles.buttonText}>Feedback</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

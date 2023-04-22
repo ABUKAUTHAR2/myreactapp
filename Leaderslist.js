@@ -12,7 +12,7 @@ class Leaderlist extends Component {
   }
 
   componentDidMount() {
-    fetch('http://192.168.174.85:80/apis/get_leaders.php')
+    fetch('http://192.168.255.85:80/apis/get_leaders.php')
       .then(response => response.json())
       .then(data => {
         const intakeYears = Array.from(new Set(data.map(leader => leader.intake_year)));
@@ -63,7 +63,7 @@ class Leaderlist extends Component {
               onPress={() => this.handleLeaderPress(leader)}
             >
               <Image
-                source={{ uri: `http://192.168.174.85:80/apis/${leader.image}` }}
+                source={{ uri: `http://192.168.255.85:80/apis/${leader.image}` }}
                 style={styles.leaderImage}
               />
               <Text style={styles.leaderName}>{leader.name}</Text>

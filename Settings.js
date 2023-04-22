@@ -8,7 +8,7 @@ class Settings extends Component {
   state = {
     notification: true,
     darkMode: false,
-    language: 'English',
+    language: 'swahili',
     showKiutDescription: false,
     showKiutappDescription:false
     

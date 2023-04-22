@@ -11,10 +11,32 @@ class Helpandfeedback extends Component {
   };
 
   handleSendPress = () => {
-    // TODO: implement sending feedback functionality
-    console.log('Sending feedback:', this.state.message);
+    fetch('http://192.168.255.85:80/apis/feedback.php', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ message: this.state.message }),
+})
+.then((response) => response.json())
+.then((responseJson) => {
+  console.log(responseJson);
+  if (responseJson.status === 'success') {
+    // Feedback sent successfully
     this.setState({ message: '' });
+  } else {
+    // Handle error response from server
+    console.error('Error sending feedback:', responseJson);
+  }
+})
+.catch((error) => {
+  // Handle network errors
+  console.error('Network error sending feedback:', error);
+});
+
   };
+  
 
   render() {
     const { message } = this.state;
