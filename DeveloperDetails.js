@@ -8,7 +8,7 @@ class DeveloperDetails extends React.Component {
   }
 
   handlePhonePress = () => {
-    Linking.openURL('tel:+255624838916');
+    Linking.openURL('tel:+132624838916');
   }
 
   render() {
@@ -54,7 +54,7 @@ class DeveloperDetails extends React.Component {
           <TouchableOpacity
             onPress={this.handlePhonePress}
             style={styles.contactContainer}>
-            <Text style={styles.contactText}>Phone: +255 624 838 916</Text>
+            <Text style={styles.contactText}>Phone: +132 624 838 916</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

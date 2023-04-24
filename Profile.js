@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     },
     profileImage: {
-    resizeMode: 'contain',
+    //resizeMode: 'contain',
     },
     username: {
     fontSize: 20,

@@ -1,7 +1,7 @@
 
 import { Alert } from 'react-native';
 
-const CREDENTIALS_URL = 'http://192.168.255.85:80/apis/login.php';
+const CREDENTIALS_URL = 'http://192.168.132.85:80/apis/login.php';
 
 
 async function fetchCredentials() {

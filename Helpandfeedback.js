@@ -11,7 +11,7 @@ class Helpandfeedback extends Component {
   };
 
   handleSendPress = () => {
-    fetch('http://192.168.255.85:80/apis/feedback.php', {
+    fetch('http://192.168.132.85:80/apis/feedback.php', {
   method: 'POST',
   headers: {
     Accept: 'application/json',

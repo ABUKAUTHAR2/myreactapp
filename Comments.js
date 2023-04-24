@@ -25,7 +25,7 @@ class CommentSection extends Component {
 
   componentDidMount() {
     // Fetch comments for the specified news article ID
-    fetch(`http://192.168.255.85:80/apis/send_comments.php?news_id=${this.state.news_id}`)
+    fetch(`http://192.168.132.85:80/apis/send_comments.php?news_id=${this.state.news_id}`)
       .then(response => response.json())
       .then(data => this.setState({ comments: data }))
       .catch(error => console.error(error));
@@ -34,7 +34,7 @@ class CommentSection extends Component {
   handleCommentSubmit = () => {
     // Send new comment data to the PHP API to add it to the database
     const { news_id, newCommentText } = this.state;
-    fetch('http://192.168.255.85:80/apis/send_comments.php', {
+    fetch('http://192.168.132.85:80/apis/send_comments.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ news_id: news_id, comment_text: newCommentText })

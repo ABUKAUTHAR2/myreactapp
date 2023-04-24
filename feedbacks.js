@@ -11,7 +11,7 @@ class FeedbackList extends Component {
   }
 
   loadFeedback = () => {
-    fetch('http://192.168.255.85:80/apis/get_feedback.php')
+    fetch('http://192.168.132.85:80/apis/get_feedback.php')
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({ feedback: responseJson });
@@ -22,7 +22,7 @@ class FeedbackList extends Component {
   };
 
   handleDelete = (id) => {
-    fetch(`http://192.168.255.85:80/apis/delete_feedback.php?id=${id}`, {
+    fetch(`http://192.168.132.85:80/apis/delete_feedback.php?id=${id}`, {
       method: 'DELETE'
     })
       .then((response) => response.json())

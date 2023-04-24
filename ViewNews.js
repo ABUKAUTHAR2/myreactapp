@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
 
-const NEWS_API_URL = 'http://192.168.255.85:80/apis/retrivenews.php';
+const NEWS_API_URL = 'http://192.168.132.85:80/apis/retrivenews.php';
 class ViewNews extends Component {
   state = {
     searchEnabled: false,
@@ -20,7 +20,7 @@ class ViewNews extends Component {
   }
 
   componentDidMount() {
-    fetch('http://192.168.255.85:80/apis/retrivenews.php')
+    fetch('http://192.168.132.85:80/apis/retrivenews.php')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -92,7 +92,7 @@ class ViewNews extends Component {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('liked', this.state.news.find(item => item.id === id).liked ? 0 : 1);
-    fetch('http://192.168.255.85:80/apis/hearticon.php', {
+    fetch('http://192.168.132.85:80/apis/hearticon.php', {
       method: 'POST',
       body: formData
     })
@@ -188,7 +188,7 @@ class ViewNews extends Component {
             <View key={item.id} style={styles.newsItem}>
              <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} >
               <Image
-  source={{ uri: `http://192.168.255.85:80/apis/${item.image_path}` }}
+  source={{ uri: `http://192.168.132.85:80/apis/${item.image_path}` }}
   style={styles.newsImage}
   resizeMode="cover"
 />

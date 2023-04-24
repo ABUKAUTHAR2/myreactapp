@@ -9,7 +9,7 @@ class Gallarey2 extends Component {
 
   componentDidMount() {
     // Fetch data from server
-    fetch('http://192.168.255.85:80/apis/get_gallarey.php')
+    fetch('http://192.168.132.85:80/apis/get_gallarey.php')
       .then(response => response.json())
       .then(images => {
         this.setState({ images });
@@ -54,7 +54,7 @@ class Gallarey2 extends Component {
           </TouchableOpacity>
           <Image
             style={styles.image}
-            source={{ uri: `http://192.168.255.85:80/apis/${images[currentIndex].image_path}` }}
+            source={{ uri: `http://192.168.132.85:80/apis/${images[currentIndex].image_path}` }}
           />
           <TouchableOpacity
             style={styles.navButton}

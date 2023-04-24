@@ -90,7 +90,7 @@ data.append('caption', caption);
 
     
 
-    fetch('http://192.168.255.85:80/apis/gallarey.php', {
+    fetch('http://192.168.132.85:80/apis/gallarey.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
