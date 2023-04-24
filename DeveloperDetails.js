@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
-    backgroundColor:'pink'
+    backgroundColor:'#a7eca9'
     
   },
   header: {

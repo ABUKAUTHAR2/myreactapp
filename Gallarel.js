@@ -156,6 +156,7 @@ data.append('caption', caption);
   flex: 1,
   //justifyContent: 'center',
   alignItems: 'center',
+  backgroundColor:'#a7eca9'
   },
   heading:{
     fontSize: 24,

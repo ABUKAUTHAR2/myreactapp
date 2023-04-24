@@ -429,7 +429,7 @@ class ViewNews extends Component {
 const styles = StyleSheet.create({
 container: {
 flex: 1,
-backgroundColor: '#fff'
+backgroundColor:'#e3ffe4'
 },header: {
   flexDirection: 'row',
   alignItems: 'center',

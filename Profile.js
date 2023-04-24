@@ -82,7 +82,7 @@ class Profile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'pink',
+    backgroundColor: '#a7eca9',
   },
   header: {
     backgroundColor: '#F5F5F5',
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'pink',
+    backgroundColor: '#a7eca9',
     shadowColor: '#000000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     logoutBtn: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#FF0000',
+    borderColor: 'black',
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 15,
