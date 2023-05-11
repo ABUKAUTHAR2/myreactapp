@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text,Image, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Credentials from './Passwords';
+import apiAddress from './AApiAdress';
 
 
 export default class Login extends Component {
@@ -10,12 +11,13 @@ export default class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      phone:'',
+      phone: '',
       credentials: [],
     };
   }
 
   async componentDidMount() {
+    
     const credentials = await Credentials();
     this.setState({ credentials });
     const userToken = await AsyncStorage.getItem('userToken');
@@ -33,8 +35,13 @@ export default class Login extends Component {
         this.props.navigation.navigate('admin');
       }
     }
+     
+  }
+  componentWillUnmount() {
+    clearInterval(this.refreshInterval); // clear interval when component unmounts
   }
   
+
   handleLogin = async () => {
     const { email, password, credentials } = this.state;
     const user = credentials.find((u) => u.email === email && u.password === password);
@@ -62,26 +69,23 @@ export default class Login extends Component {
       alert('Invalid email or password');
     }
   };
-    
+
   setAuthentication = () => {
     this.props.navigation.setParams({ isAuthenticated: true });
-  }
-  
+  };
+
   render() {
     const { navigation } = this.props;
-    
+
     return (
-      <View style={styles.container}>
-        <Image
-          source={require('./assets/kiutsologo.png')}
-          style={styles.logoimage}
-        />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Image source={require('./assets/kiutsologo.png')} style={styles.logoimage} />
         <Text style={styles.logo}>KIUTSO NEWS</Text>
-        
+
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
-            placeholder="Put your email here only ..."
+            placeholder="email  ..."
             placeholderTextColor="#003f5c"
             onChangeText={(email) => this.setState({ email })}
           />
@@ -95,77 +99,87 @@ export default class Login extends Component {
             onChangeText={(password) => this.setState({ password })}
           />
         </View>
-        <TouchableOpacity style={styles.loginBtn}  onPress={this.handleLogin}>
-          <Text style={styles.loginText} >LOGIiN</Text>
+        <TouchableOpacity style={styles.loginBtn} onPress={this.handleLogin}>
+          <Text style={styles.loginText}>LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
           <Text style={styles.signupText}>Don't have an account? Signup</Text>
         </TouchableOpacity>
 
-       
-
-        
-       
-
-      </View>
+        <View style={styles.footer}>
+            <Text style={styles.footerText}>© 2022 VuCu Technologies. All rights reserved.</Text>
+          </View>
+      </ScrollView>
     );
   }
 }
 
-
-
-
-
-
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#a7eca9',
     alignItems: 'center',
     justifyContent: 'center',
-   
-  },
-  logo: {
+    },
+    logo: {
     fontWeight: 'bold',
-    fontSize: 50,
+    fontSize: 35,
     color: '#4CAF50',
     marginBottom: 40,
-  },
-  logoimage: {
-    width: 70,
-    height: 70,
-    borderRadius: 50,
-    paddingTop:70
     },
-  inputView: {
+    logoimage: {
+        width: 80,
+        height: 80,
+        borderRadius: 50,
+        paddingTop:70
+        },
+    inputView: {
     width: '80%',
-    backgroundColor: '#F1F1F1',
+    backgroundColor: '#d9f5e4',
     borderRadius: 25,
     height: 50,
     marginBottom: 20,
     justifyContent: 'center',
     padding: 20,
-  },
-  inputText: {
+    },
+    inputText: {
     height: 50,
     color: 'black',
-  },
-  loginBtn: {
+    },
+    forgot: {
+      color: '#4CAF50',
+    fontSize: 11,
+    },
+    loginBtn: {
     width: '80%',
-    backgroundColor: '#4CAF50',
+    backgroundColor:  '#4CAF50',
     borderRadius: 25,
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
     marginBottom: 10,
-  },
-  loginText: {
+    },
+    loginText: {
     color: 'white',
-  },
-  signupText: {
-    color: '#4CAF50',
-    marginTop: 15,
-  },
-});
+    fontWeight: 'bold',
+    },
+    signupText: {
+      color: '#4CAF50',
+    },
+    footer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 20,
+      marginBottom: 20,
+    },
+    footerText: {
+      fontSize: 14,
+      color: 'gray',
+    },
+    });
+    
+    
+    
+    
+    

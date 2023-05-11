@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingVi
 
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView } from 'react-native';
+import apiAddress from './AApiAdress';
 
 class AddNews extends Component {
   state = {
@@ -144,7 +145,7 @@ data.append('name', name);
   
     
 
-    fetch('http://192.168.132.85:80/apis/add_leader.php', {
+    fetch(apiAddress + '/apis/add_leader.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',

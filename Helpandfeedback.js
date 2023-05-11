@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-
+import apiAddress from './AApiAdress';
 class Helpandfeedback extends Component {
   state = {
     message: '',
@@ -11,7 +11,7 @@ class Helpandfeedback extends Component {
   };
 
   handleSendPress = () => {
-    fetch('http://192.168.132.85:80/apis/feedback.php', {
+    fetch(apiAddress + '/apis/feedback.php', {
   method: 'POST',
   headers: {
     Accept: 'application/json',

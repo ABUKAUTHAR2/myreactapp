@@ -173,6 +173,9 @@ class Settings extends Component {
         )}
       </View>
     </ScrollView>
+    <View style={styles.footer}>
+            <Text style={styles.footerText}>© 2022 VuCu Technologies. All rights reserved.</Text>
+          </View>
   </View>
 );
 }
@@ -220,6 +223,16 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 14,
     marginLeft: 40,
+  },
+  footer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  footerText: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
  export default Settings

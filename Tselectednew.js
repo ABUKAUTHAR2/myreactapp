@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image,ScrollView } from 'react-native';
 import Footer from './Footer';
+import apiAddress from './AApiAdress';
 
 class Tselectednew extends Component {
   render() {
@@ -11,7 +12,7 @@ class Tselectednew extends Component {
       
         <ScrollView>
              <View style={styles.container}>
-        <Image source={{ uri: `http://192.168.132.85:80/apis/${item.image_path}` }} style={styles.newsImage} />
+        <Image source={{ uri: apiAddress + `/apis/${item.image_path}` }} style={styles.newsImage} />
         <View style={styles.newsDetails}>
           <Text style={styles.context}>{item.context}</Text>
           <Text style={styles.summary}>{item.summary}</Text>

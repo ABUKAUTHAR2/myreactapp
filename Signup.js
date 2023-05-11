@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { ScrollView } from 'react-native';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import apiAddress from './AApiAdress';
+import { StackActions } from '@react-navigation/native';
+
 
 class Signup extends Component {
   state = {
@@ -13,6 +17,7 @@ class Signup extends Component {
     passwordStrength: 'Weak',
     passwordError: '',
     confirmPasswordError: '',
+    emailError: '',
   };
 
   handlefirst_nameChange = (first_name) => {
@@ -23,9 +28,11 @@ class Signup extends Component {
     this.setState({ last_name });
   };
 
+  
   handleEmailChange = (email) => {
-    this.setState({ email });
+    this.setState({ email, emailError: '' });
   };
+  
 
   handlePhoneChange = (phone) => {
     this.setState({ phone });
@@ -107,7 +114,7 @@ class Signup extends Component {
     }
   
     // Send data to PHP script
-    fetch('http://192.168.132.85:80/apis/signup.php', {
+    fetch(apiAddress + '/apis/signup.php', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -121,14 +128,12 @@ class Signup extends Component {
         password: password,
       }),
     })
-      .then((response) => response.text())
-      .then((responseJson) => {
-        console.log(responseJson);
-        alert("you now registered go to log in page to see the news")
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then((responseJson) => {
+      alert("you now registered go to log in page to see the news")
+      const replaceAction = StackActions.replace('Login');
+      this.props.navigation.dispatch(replaceAction);
+    })
+    
   };
   
 
@@ -153,7 +158,8 @@ confirmPasswordError,
 
 const { navigation } = this.props;
 return (
-  <View style={styles.container}>
+  <ScrollView contentContainerStyle={styles.container}>
+    
     <Text style={styles.title}>Sign up</Text>
     <View style={styles.inputContainer}>
       <TextInput
@@ -223,17 +229,23 @@ return (
     <TouchableOpacity  onPress={() => this.props.navigation.goBack(9)} >
        <Text style={styles.signin}>Already have an account? login </Text>
     </TouchableOpacity>
+    <View style={styles.footer}>
+    <Text style={styles.footerText}>© 2022 VuCu Technologies. All rights reserved.</Text>
   </View>
+    
+  
+  </ScrollView>
+  
 );
 }
 }
 
 const styles = StyleSheet.create({
 container: {
-flex: 1,
-justifyContent: 'center',
-alignItems: 'center',
-backgroundColor: '#fff',
+  flexGrow: 1,
+ // backgroundColor: '#a7eca9',
+  alignItems: 'center',
+  justifyContent: 'center',
 },
 title: {
 fontSize: 24,
@@ -289,6 +301,17 @@ paddingVertical: 10,
 paddingHorizontal: 20,
 marginTop: 20,
 },
+footer: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop: 20,
+  marginBottom: 20,
+},
+footerText: {
+  fontSize: 14,
+  color: 'gray',
+},
+  
 
 });
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import apiAddress from './AApiAdress';
 
 class Gallarey2 extends Component {
   state = {
@@ -9,7 +10,7 @@ class Gallarey2 extends Component {
 
   componentDidMount() {
     // Fetch data from server
-    fetch('http://192.168.132.85:80/apis/get_gallarey.php')
+    fetch(apiAddress + '/apis/get_gallarey.php')
       .then(response => response.json())
       .then(images => {
         this.setState({ images });
@@ -43,28 +44,32 @@ class Gallarey2 extends Component {
 
     return (
       <View style={styles.container}>
-         <Text style={styles.logo}>VIEW STATUSES</Text>
-         <View style={styles.imageContainer}>
-        
+        <View style={styles.imageContainer}>
           <TouchableOpacity
-            style={styles.navButton}
+            style={[styles.navButton, { left: 0 }]}
             onPress={this.handlePrev}
             disabled={currentIndex === 0}
-          ><Text style={{ fontSize: 44 }}>&lt;</Text>
+          >
+            <Text style={{ fontSize: 40, fontWeight: 'bold', }}>&lt;</Text>
           </TouchableOpacity>
           <Image
             style={styles.image}
-            source={{ uri: `http://192.168.132.85:80/apis/${images[currentIndex].image_path}` }}
+            source={{ uri: apiAddress + `/apis/${images[currentIndex].image_path}` }}
           />
           <TouchableOpacity
-            style={styles.navButton}
+            style={[styles.navButton, { right: 0 }]}
             onPress={this.handleNext}
             disabled={currentIndex === images.length - 1}
-          ><Text style={{ fontSize: 44 }}>&gt;</Text></TouchableOpacity>
+          >
+            <Text style={{ fontSize: 40, fontWeight: 'bold' }}>&gt;</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.captionContainer}>
           <Text style={styles.captionText}>{images[currentIndex].caption}</Text>
         </View>
+        <View style={styles.footer}>
+            <Text style={styles.footerText}>© 2022 VuCu Technologies. All rights reserved.</Text>
+          </View>
       </View>
     );
   }
@@ -73,48 +78,66 @@ class Gallarey2 extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: "#F5F5F5",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: '#f0f0f0',
   },
+ 
   imageContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
+    marginLeft:20,
   },
   image: {
-    flex: 8,
-    resizeMode: 'contain',
-    height: '100%',
-    width: '100%',
+    
+    width: '70%',
+    height: "100%",
+    resizeMode: 'contain'
   },
-  logo: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#4CAF50',
-    marginTop:55
-},
-  navButton: {
-    flex: 1,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    justifyContent: 'center',
   
-   
+  
+  navButton: {
+    padding: 10,
+    backgroundColor: '#FFF',
+    borderRadius: 30,
+    marginHorizontal: 20,
+    elevation: 5,
+  },
+  navButtonText: {
+    fontSize: 24,
+    color: '#555',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
   },
   captionContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 20,
-    marginBottom:155
+    width: "80%",
+    marginVertical: 50,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    backgroundColor: "#FFF",
+    borderRadius: 20,
+    elevation: 5,
   },
   captionText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop:45
-
+    color:'#333',
+    fontSize: 20,
+    textAlign: "center",
+    lineHeight: 30,
+  },
+  footer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  footerText: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
-
-export default Gallarey2;
+ export default Gallarey2

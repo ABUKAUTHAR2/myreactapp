@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { Button } from 'react-native';
-
+import * as Notifications from 'expo-notifications';
 import Signup from './Signup';
 import Login from './Login';
 import AddNews from './AddNews';
@@ -30,8 +28,6 @@ import Gallery from './Gallarel';
 import Gallarey2 from './gallarey2';
 import FeedbackList from './feedbacks';
 
-
-
 const Stack = createNativeStackNavigator();
 
 class App extends Component {
@@ -42,9 +38,12 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // Check if user is authenticated
     this.checkAuthentication();
+
+    // Schedule a daily notification at 8 am to remind the user to check the app for news
+    await this.scheduleDailyNotification();
   }
 
   async checkAuthentication() {
@@ -67,7 +66,7 @@ class App extends Component {
       console.log(error);
     }
   }
-  
+
   async clearAuthentication() {
     try {
       await AsyncStorage.removeItem('isAuthenticated');
@@ -76,18 +75,59 @@ class App extends Component {
       console.log(error);
     }
   }
+
   logout = async () => {
     await AsyncStorage.removeItem('userData');
     await AsyncStorage.removeItem('userToken');
     this.props.navigation.setParams({ isAuthenticated: false });
     this.props.navigation.navigate('Login');
   };
+
+  async  scheduleDailyNotification() {
+    // Check permission for sending notifications
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+    console.log('Permission to send notifications denied');
+    return;
+    }
+    
+    // Calculate the time for the daily notification (10:13 PM)
+    const now = new Date();
+    const scheduledTime = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    17, // hour
+    36, // minute
+    0, // second
+    );
+    
+    // If the scheduled time has already passed today, schedule for tomorrow instead
+    if (now > scheduledTime) {
+    scheduledTime.setDate(scheduledTime.getDate() + 1);
+    }
+    
+    // Calculate the time until the scheduled timeS
+    const timeUntilNotification = scheduledTime.getTime() - now.getTime();
+    
+    // Schedule the notification
+    await Notifications.scheduleNotificationAsync({
+    content: {
+    title: 'Check the app for news99999!',
+    body: 'Stay updated with the latest news and events.',
+    },
+    trigger: {
+    seconds: timeUntilNotification / 500,
+    repeats: false,
+    },
+    });
+    }
   
+
   render() {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          
               <Stack.Screen
                 name="Login"
                 component={Login}
@@ -161,8 +201,7 @@ class App extends Component {
           name="Gallery"
           component={Gallery}
           options={{ title: 'Gallery' }}
-        />
-        
+        /> 
         <Stack.Screen
           name="Gallarey2"
           component={Gallarey2}
@@ -188,25 +227,19 @@ class App extends Component {
   component={Profile}
   options={{
     title: 'Profile',
-    
   }}
   //initialParams={{ username: this.state.username,phone:this.state.phone, email: this.state.email, clearAuthentication: this.clearAuthentication.bind(this) }}
 />
-
 <Stack.Screen
           name="Leaders"
           component={Leaders}
           options={{ title: 'Leaders' }}
         />
-
 <Stack.Screen
           name="AddLeader"
           component={AddLeader}
           options={{ title: 'AddLeader' }}
         />
-
-
-
 <Stack.Screen
           name="Delete_leaders"
           component={Delete_leaders}
@@ -217,13 +250,12 @@ class App extends Component {
           component={DeveloperDetails}
           options={{ title: 'Developer Details' }}
         />
-    
-  </Stack.Navigator>
+    </Stack.Navigator>
 </NavigationContainer>
-
     );
   }
   
 }
-
 export default App;
+  
+  

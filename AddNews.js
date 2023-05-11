@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Image } from 'react-native';
+import { View, Text, TouchableOpacity,ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Image } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
+import apiAddress from './AApiAdress';
 
 class AddNews extends Component {
   state = {
@@ -61,7 +62,7 @@ class AddNews extends Component {
   };
 
   handleDescriptionChange = (description) => {
-    if (description.length <= 250) {
+    if (description.length <= 1950) {
       this.setState({ description, descriptionError: '' });
     } else {
       this.setState({ descriptionError: 'Description should be less than 250 words' });
@@ -115,7 +116,7 @@ data.append('description', description);
     data.append('description', description);
     
 
-    fetch('http://192.168.132.85:80/apis/addnews.php', {
+    fetch(apiAddress + '/apis/addnews.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -137,7 +138,7 @@ data.append('description', description);
       const { context, fileData, summary, description, contextError, fileDataError, summaryError, descriptionError } = this.state;
       
       return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.form}>
             <Text style={styles.heading}>ADD NEWS TO THE APP DATABASE </Text>
             <Text style={styles.label}>Context:</Text>
@@ -185,17 +186,18 @@ data.append('description', description);
               <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
           </View>
-        </KeyboardAvoidingView>
+        </ScrollView>
       );
     }
   }
   
   const styles = StyleSheet.create({
-  container: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  },
+    container: {
+      flexGrow: 1,
+     // backgroundColor: '#a7eca9',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   heading:{
     fontSize: 24,
     fontWeight: 'bold',

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import apiAddress from './AApiAdress';
 
-const API_URL = 'http://192.168.132.85:80/apis/get_leaders.php';
+const API_URL = apiAddress + '/apis/get_leaders.php';
 
 class AddLeader extends Component {
   state = {
@@ -29,7 +30,7 @@ class AddLeader extends Component {
   };
 
   handleDelete = async (id) => {
-    const response = await fetch(`http://192.168.132.85:80/apis/delete_leader.php?id=${id}`);
+    const response = await fetch(apiAddress + `/apis/delete_leader.php?id=${id}`);
     const json = await response.json();
     if (json.status === 'success') {
       this.fetchUsers();
@@ -41,7 +42,7 @@ class AddLeader extends Component {
   };
 
   handleSave = async (id, data) => {
-    const response = await fetch(`http://192.168.132.85:80/apis/update_leader.php?id=${id}`, {
+    const response = await fetch(apiAddress + `/apis/update_leader.php?id=${id}`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {

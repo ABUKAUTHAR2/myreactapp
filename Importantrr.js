@@ -1,5 +1,6 @@
 //this is reall
 import React, { Component } from 'react';
+import apiAddress from './AApiAdress';
 
 import {
   View,
@@ -20,7 +21,7 @@ class Important extends Component {
 
 
   componentDidMount() {
-    fetch('http://192.168.132.85:80/apis/retrivenews.php')
+    fetch(apiAddress + '/apis/retrivenews.php')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -59,7 +60,7 @@ class Important extends Component {
           <TouchableOpacity
             key={newsItem.id}
             onPress={() => this.handleImagePress(newsItem)} style={styles.iconwithnew}>
-           <Image source={{ uri: `http://192.168.132.85:80/apis/${newsItem.image_path}` }} style={styles.newsImage} /><Text style={styles.textt}><Text style={styles.textt1}>{newsItem.context}:</Text> <Text style={styles.textt2}>{newsItem.summary}</Text> </Text>
+           <Image source={{ uri: apiAddress + `/apis/${newsItem.image_path}` }} style={styles.newsImage} /><Text style={styles.textt}><Text style={styles.textt1}>{newsItem.context}:</Text> <Text style={styles.textt2}>{newsItem.summary}</Text> </Text>
            <View style={styles.line} />
           </TouchableOpacity>
         ))}

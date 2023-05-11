@@ -1,8 +1,7 @@
-
 import { Alert } from 'react-native';
+import apiAddress from './AApiAdress';
 
-const CREDENTIALS_URL = 'http://192.168.132.85:80/apis/login.php';
-
+const CREDENTIALS_URL = apiAddress + '/apis/login.php';
 
 async function fetchCredentials() {
   try {
@@ -18,7 +17,6 @@ async function fetchCredentials() {
 
 export default fetchCredentials;
 
-
-
-
-
+setInterval(() => {
+  fetchCredentials();
+}, 3000); // Refresh every 3 seconds

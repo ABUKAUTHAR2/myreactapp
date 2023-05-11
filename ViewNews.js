@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import { View,Alert,
    Text, Share, Image,  StyleSheet, ScrollView,TouchableOpacity, Dimensions,TextInput, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 import { MaterialIcons } from '@expo/vector-icons';
 import Footer from './Footer';
+import apiAddress from './AApiAdress';
 
-const NEWS_API_URL = 'http://192.168.132.85:80/apis/retrivenews.php';
+const endpointUrl = apiAddress + '/apis/retrivenews.php';
+
+
+const NEWS_API_URL = endpointUrl ;
 class ViewNews extends Component {
   state = {
     searchEnabled: false,
@@ -20,7 +25,20 @@ class ViewNews extends Component {
   }
 
   componentDidMount() {
-    fetch('http://192.168.132.85:80/apis/retrivenews.php')
+    this.fetchNewsData(); // call fetchNewsData() once when component mounts
+  
+    // set interval to call fetchNewsData() every 5 seconds
+    this.refreshInterval = setInterval(() => {
+      this.fetchNewsData();
+    }, 5000);
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.refreshInterval); // clear interval when component unmounts
+  }
+  
+  fetchNewsData = () => {
+    fetch(NEWS_API_URL)
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -30,6 +48,7 @@ class ViewNews extends Component {
       })
       .catch(error => console.error(error));
   }
+  
   
   onShare = async (id) => {
     const item = this.state.news.find(item => item.id === id);
@@ -92,7 +111,7 @@ class ViewNews extends Component {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('liked', this.state.news.find(item => item.id === id).liked ? 0 : 1);
-    fetch('http://192.168.132.85:80/apis/hearticon.php', {
+    fetch(apiAddress + '/apis/hearticon.php', {
       method: 'POST',
       body: formData
     })
@@ -188,7 +207,7 @@ class ViewNews extends Component {
             <View key={item.id} style={styles.newsItem}>
              <TouchableOpacity onDoubleClick={() => this.handleHearticon(item.id)} >
               <Image
-  source={{ uri: `http://192.168.132.85:80/apis/${item.image_path}` }}
+ source={{ uri: apiAddress + `/apis/${item.image_path}` }}
   style={styles.newsImage}
   resizeMode="cover"
 />
@@ -220,7 +239,12 @@ class ViewNews extends Component {
                   <Text style={styles.newsTime}>{item.time}</Text>
                 </View>
               </View>
-              <View style={styles.line} />
+              <View
+      style={{
+        borderBottomColor: 'black',
+        borderBottomWidth: 1,
+      }}
+    />
             </View>
           ))}
         </ScrollView>
@@ -371,7 +395,8 @@ class ViewNews extends Component {
         padding: 10,
        
       }}
-      onPress={() =>this.props.navigation.navigate('Gallery')}
+      onPress={() => this.props.navigation.navigate('Gallarey2')}
+      
     >
       <View
         style={{
@@ -386,7 +411,33 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-         Gallery
+         View Status
+        </Text>
+      </View>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+      onPress={() =>this.props.navigation.navigate('Gallery')}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="folder" size={20} style={styles.icon} color="black" />
+        
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+         Upload status
         </Text>
       </View>
     </TouchableOpacity>
@@ -480,14 +531,7 @@ paddingHorizontal: 20
 },
 newsItem: {
 marginVertical: 20,
-shadowColor: '#000',
-shadowOffset: {
-width: 0,
-height: 2
-},
-shadowOpacity: 0.23,
-shadowRadius: 2.62,
-elevation: 4
+backgroundColor:'#e3ffe4',
 },
 newsImage: {
 width: '100%',

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiAddress from './AApiAdress';
 
 class CommentSection extends Component {
 
@@ -25,7 +25,7 @@ class CommentSection extends Component {
 
   componentDidMount() {
     // Fetch comments for the specified news article ID
-    fetch(`http://192.168.132.85:80/apis/send_comments.php?news_id=${this.state.news_id}`)
+    fetch(apiAddress + `/apis/send_comments.php?news_id=${this.state.news_id}`)
       .then(response => response.json())
       .then(data => this.setState({ comments: data }))
       .catch(error => console.error(error));
@@ -34,7 +34,7 @@ class CommentSection extends Component {
   handleCommentSubmit = () => {
     // Send new comment data to the PHP API to add it to the database
     const { news_id, newCommentText } = this.state;
-    fetch('http://192.168.132.85:80/apis/send_comments.php', {
+    fetch(apiAddress + '/apis/send_comments.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ news_id: news_id, comment_text: newCommentText })
@@ -58,7 +58,7 @@ class CommentSection extends Component {
     const { comments, newCommentText } = this.state;
 
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {/* Display all comments for the specified news article */}
         <View style={styles.commentsContainer}>
           {comments.map(comment => (
@@ -81,7 +81,7 @@ class CommentSection extends Component {
             <Icon name="send" size={20} color="#4CAF50" />
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text,Image, TextInput, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import apiAddress from './AApiAdress';
 
-const API_URL = 'http://192.168.132.85:80/apis/retrivenews.php';
+const API_URL = apiAddress + '/apis/retrivenews.php';
 
 class NewsManager extends Component {
   state = {
@@ -29,7 +30,7 @@ class NewsManager extends Component {
   };
 
   handleDelete = async (id) => {
-    const response = await fetch(`http://192.168.132.85:80/apis/delete_news.php?id=${id}`);
+    const response = await fetch(apiAddress + `/apis/delete_news.php?id=${id}`);
     const json = await response.json();
     if (json.status === 'success') {
       this.fetchNews();
@@ -41,7 +42,7 @@ class NewsManager extends Component {
   };
 
   handleSave = async (id, data) => {
-    const response = await fetch(`http://192.168.132.85:80/apis/update_news.php?id=${id}`, {
+    const response = await fetch(apiAddress + `/apis/update_news.php?id=${id}`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -71,7 +72,7 @@ class NewsManager extends Component {
           ) : (
             <>
              <Text style={styles.title}>{context}</Text>
-             <Image source={{ uri: `http://192.168.132.85:80/apis/${image_path}` }} style={styles.newsImage} />
+             <Image source={{ uri: apiAddress + `/apis/${image_path}` }} style={styles.newsImage} />
               <Text style={styles.summary}>{summary}</Text>
               <Text style={styles.date}>Date Uploaded: {date}</Text>
               <Text style={styles.likes}>Likes: {likes}</Text>

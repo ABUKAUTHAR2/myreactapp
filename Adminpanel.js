@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import apiAddress from './AApiAdress';
 
 class AdminPanel extends Component {
   render() {
@@ -30,12 +31,28 @@ class AdminPanel extends Component {
             <Text style={styles.buttonText}>Feedback</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.footer}>
+    <Text style={styles.footerText}>© 2022 VuCu Technologies. All rights reserved.</Text>
+  </View>
+    
+  
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+    
+  footer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  footerText: {
+    fontSize: 14,
+    color: 'gray',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

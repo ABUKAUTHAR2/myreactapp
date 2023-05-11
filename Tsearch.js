@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Footer from './Footer';
+import apiAddress from './AApiAdress';
 
 class Tsearch extends Component {
   state = {
@@ -19,7 +20,7 @@ class Tsearch extends Component {
   };
 
   componentDidMount() {
-    fetch('http://192.168.132.85:80/apis/retrivenews.php')
+    fetch(apiAddress + '/apis/retrivenews.php')
       .then(response => response.json())
       .then(data => {
         this.setState({
@@ -57,7 +58,7 @@ class Tsearch extends Component {
           <TouchableOpacity
             key={newsItem.id}
             onPress={() => this.handleImagePress(newsItem)}>
-            <Image  source={{ uri: `http://192.168.132.85:80/apis/${newsItem.image_path}` }} style={styles.newsImage} />
+            <Image  source={{ uri: apiAddress + `/apis/${newsItem.image_path}` }} style={styles.newsImage} />
           </TouchableOpacity>
         ))}
       </View>
@@ -92,6 +93,7 @@ class Tsearch extends Component {
         container: {
         flex: 1,
         backgroundColor: '#F2F2F2',
+        backgroundColor:'#e3ffe4'
         },
         searchContainer: {
         flexDirection: 'row',
