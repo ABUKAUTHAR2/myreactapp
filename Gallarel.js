@@ -83,6 +83,7 @@ class Gallery extends Component {
     })
     .then(() => {
       alert("Another picture is added to the system")
+      this.setState({ fileData: null, caption: '' });
     })
     .catch((error) => {
       console.error(error);
@@ -129,7 +130,78 @@ class Gallery extends Component {
 }
 
 const styles = StyleSheet.create({
-  
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  form: {
+    width: '90%',
+    maxWidth: 400,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
+  },
+  heading: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
+    color: '#4CAF50',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#4CAF50',
+  },
+  input: {
+    height: 40,
+    borderColor: '#4CAF50',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+    color: '#4CAF50',
+  },
+  selectText: {
+    color: '#a9a9a9',
+    fontWeight: 'bold',
+  },
+  button: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 10,
+    fontWeight: 'bold',
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    marginTop: 10,
+    marginBottom: 20,
+    borderRadius: 5,
+  },
   footer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -140,74 +212,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
   },
-  
-container: {
-flex: 1,
-justifyContent: 'center',
-alignItems: 'center',
-backgroundColor: '#F5FCFF',
-},
-form: {
-width: '90%',
-maxWidth: 400,
-backgroundColor: '#fff',
-borderRadius: 10,
-padding: 20,
-shadowColor: '#000',
-shadowOffset: {
-width: 0,
-height: 3,
-},
-shadowOpacity: 0.27,
-shadowRadius: 4.65,
-elevation: 6,
-},
-heading: {
-fontSize: 20,
-fontWeight: 'bold',
-textAlign: 'center',
-marginBottom: 20,
-},
-label: {
-fontSize: 16,
-fontWeight: 'bold',
-marginBottom: 5,
-},
-input: {
-height: 40,
-borderColor: 'gray',
-borderWidth: 1,
-paddingHorizontal: 10,
-marginBottom: 10,
-},
-selectText: {
-color: '#a9a9a9',
-},
-button: {
-backgroundColor: '#4CAF50',
-paddingVertical: 10,
-paddingHorizontal: 20,
-borderRadius: 5,
-marginTop: 20,
-alignSelf: 'center',
-},
-buttonText: {
-color: '#fff',
-fontSize: 16,
-fontWeight: 'bold',
-},
-error: {
-color: 'red',
-marginBottom: 10,
-},
-image: {
-width: '100%',
-height: 200,
-resizeMode: 'contain',
-marginTop: 10,
-marginBottom: 10,
-},
 });
+
 
 export default Gallery;
 

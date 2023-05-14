@@ -27,6 +27,8 @@ import DeveloperDetails from './DeveloperDetails';
 import Gallery from './Gallarel';
 import Gallarey2 from './gallarey2';
 import FeedbackList from './feedbacks';
+import LostItem from './LostItem';
+import GetLostItem from './GetLostItem';
 
 const Stack = createNativeStackNavigator();
 
@@ -240,6 +242,12 @@ class App extends Component {
           component={AddLeader}
           options={{ title: 'AddLeader' }}
         />
+         
+        <Stack.Screen
+          name="LostItem"
+          component={LostItem}
+          options={{ title: 'LostItem' }}
+        />
 <Stack.Screen
           name="Delete_leaders"
           component={Delete_leaders}
@@ -250,6 +258,10 @@ class App extends Component {
           component={DeveloperDetails}
           options={{ title: 'Developer Details' }}
         />
+        <Stack.Screen
+        name='GetLostItem'
+        component={GetLostItem}
+        options={{title:'GetLostItem'}}/>
     </Stack.Navigator>
 </NavigationContainer>
     );

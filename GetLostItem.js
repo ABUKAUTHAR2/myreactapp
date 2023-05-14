@@ -14,7 +14,26 @@ class GetLostItem extends Component {
 
   componentDidMount() {
     this.getItems();
+    this.refreshInterval = setInterval(this.getItems, 3000); // Refresh every 3 seconds
   }
+
+  componentWillUnmount() {
+    clearInterval(this.refreshInterval); // Stop refreshing on unmount
+  }
+
+  deleteItem = async (id) => {
+    try {
+      const response = await axios.post(apiAddress + `/apis/Deletelostfound.php?id=${id}`);
+      if (response.data.success) {
+        alert("lost&found deleted succesfully");
+        this.getItems();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  
 
   getItems = async () => {
     try {
@@ -69,14 +88,16 @@ class GetLostItem extends Component {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity onPress= {this.handleclickitem}>
-            <View style={styles.itemContainer}>
-              <Image source={{ uri: apiAddress + `/apis/${item.image_path}` }} style={styles.itemImage} />
-              <Text style={styles.itemDescription}>{item.discriptions}</Text>
-            </View>
+              <View style={styles.itemContainer}>
+                <Image source={{ uri: apiAddress + `/apis/${item.image_path}` }} style={styles.itemImage} />
+                <Text style={styles.itemDescription}>{item.discriptions}</Text>
+                <TouchableOpacity style={styles.deleteButton} onPress={() => this.deleteItem(item.id)}>
+                  <Text style={styles.deleteText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
             </TouchableOpacity>
-
-
           )}
+          
         />
   
         
@@ -145,6 +166,18 @@ itemDescription: {
 flex: 1,
 fontSize: 16,
 },
+deleteButton: {
+  backgroundColor: 'red',
+  borderRadius: 5,
+  padding: 5,
+  marginLeft: 10,
+},
+deleteText: {
+  color: 'white',
+  fontWeight: 'bold',
+  fontSize: 16,
+},
+
 });
 
 export default GetLostItem;

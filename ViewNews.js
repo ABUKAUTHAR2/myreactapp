@@ -309,7 +309,7 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-          settings
+          Settings
         </Text>
       </View>
     </TouchableOpacity>
@@ -359,7 +359,7 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-          Help&feedbck
+          Help&Feedbck
         </Text>
       </View>
     </TouchableOpacity>
@@ -404,7 +404,7 @@ class ViewNews extends Component {
           alignItems: 'center',
         }}
       >
-        <Icon name="picture-o" size={20} style={styles.icon} color="black" />
+        <Icon name="circle-o-notch" size={20} style={styles.icon} color="black" />
         <Text
           style={{
             fontWeight: 'bold',
@@ -437,10 +437,36 @@ class ViewNews extends Component {
             fontSize: 16,
           }}
         >
-         Upload status
+         Upload Status
         </Text>
       </View>
     </TouchableOpacity>
+    <TouchableOpacity
+      style={{
+        borderRadius: 5,
+        padding: 10,
+       
+      }}
+      onPress={() =>this.props.navigation.navigate('GetLostItem')}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <Icon name="exclamation-circle" size={20} style={styles.icon} color="black" />
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 16,
+          }}
+        >
+          Lost Items
+        </Text>
+      </View>
+    </TouchableOpacity>
+           
     <TouchableOpacity
       style={{
         borderRadius: 5,
