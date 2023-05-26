@@ -85,6 +85,7 @@ class LostItem extends Component {
       alert("Another picture is added to the system");
       // clear the input fields
       this.setState({ fileData: null, discriptions: '' });
+      this.setState({ caption: '', image: null, isLoading: false });
     })
     .catch((error) => {
       console.error(error);
