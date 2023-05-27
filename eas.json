@@ -10,13 +10,14 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {
+    "release": {
       "android": {
-        "gradleCommand": ":app:bundleRelease"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
       }
     }
   },
   "submit": {
-    "production": {}
+    "release": {}
   }
 }
